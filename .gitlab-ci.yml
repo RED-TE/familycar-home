@@ -1,0 +1,16 @@
+image: alpine:3.20
+
+stages: [deploy]
+
+pages:
+  stage: deploy
+  script:
+    - mkdir -p public
+    - cp -r ./* public/ || true
+    - rm -f public/.gitlab-ci.yml || true
+    - rm -rf public/.git || true
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
