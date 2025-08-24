@@ -167,7 +167,7 @@ textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:
 <script type="module">
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 // ===== Mock mode: DB 없이 화면 개발용 =====
-const USE_MOCK = true; // true면 Supabase 대신 아래 MOCK 데이터로 표를 그림
+const USE_MOCK = false; // true면 Supabase 대신 아래 MOCK 데이터로 표를 그림
 const MOCK = [
   {
     id: "11111111-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
@@ -254,7 +254,7 @@ const MOCK = [
 const SUPABASE_URL  = 'https://juktgtdtcecuehfjtjx.supabase.co';
 const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1a3R0Z2RkdGNlY3VoZWZ0anR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1MTc0MzksImV4cCI6MjA3MTA5MzQzOX0.mIRMntQU9ncbUm_h0hRSA1TWx-XLu51nsXDuA3wSGW8';
 const supa = createClient(SUPABASE_URL, SUPABASE_ANON);
-const DEV_BYPASS = true; // TEMP: 로그인 없이 관리자 화면 진입 (테스트용)
+const DEV_BYPASS = false; // TEMP: 로그인 없이 관리자 화면 진입 (테스트용)
 
 const loginView = document.getElementById('loginView');
 const dashView  = document.getElementById('dashView');
