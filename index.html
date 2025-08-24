@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<base href="./">
 <title>패밀리오토플랜 | 장기렌트·리스 최저가 견적</title>
 <meta name="description" content="장기렌트·리스 비교, 한 눈에. 투명 견적·빠른 출고·맞춤 조건으로 최적의 선택을 제안합니다." />
 <meta name="theme-color" content="#16a34a" />
@@ -534,7 +535,7 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 
     <!-- 수입 SUV -->
     <div class="card vehicle reveal" data-tags="import suv">
-      <img src="https://placehold.co/520x300/png?text=VOLVO+XC60" alt="볼보 XC60">
+      <img src="images/cars/XC60.png" alt="볼보 XC60">
       <div class="row"><h3>볼보 XC60</h3><span class="price">월 60만원~</span></div>
       <a class="btn ghost" href="#contact">상담신청</a>
     </div>
@@ -929,45 +930,7 @@ burger?.addEventListener('click',()=>{if(!drawer)return;const open=drawer.style.
   go(0); start();
 })();
 
-/* ====== PROMO IMAGE FALLBACK (robust & proactive) ====== */
-(()=>{
-  const imgs = document.querySelectorAll('#promo img.bg');
-  imgs.forEach(img=>{
-    const stripExt=p=>p.replace(/\.(png|jpg|jpeg|webp)$/i,'');
-    const src=img.getAttribute('src')||''; // e.g., images/header-promo/promotion-1-1600.png
-    const base = stripExt(src).split('/').pop(); // promotion-1-1600
-    const names=[base, base.replace(/-800|-1200|-1600/,'-1600')];
-    const dirs=['images/header-promo/','images/헤더 프로모션/'];
-    const exts=['png','jpg','jpeg','webp'];
-    const candidates=[];
-    dirs.forEach(d=>names.forEach(n=>exts.forEach(ext=>candidates.push(d+n+'.'+ext))));
-
-    let i=0; let tried=new Set();
-    const tryNext=()=>{
-      while(i<candidates.length){
-        const next=candidates[i++];
-        if(tried.has(next) || img.src.endsWith(next)) continue;
-        tried.add(next);
-        img.src = next;
-        return true;
-      }
-      return false;
-    };
-
-    const needsFallback=()=>!(img.complete && img.naturalWidth>0 && img.naturalHeight>0);
-
-    const onError=()=>{ if(!tryNext()){ img.removeEventListener('error', onError); img.removeEventListener('load', onLoad);} };
-    const onLoad =()=>{ if(needsFallback()){ tryNext(); } else { img.removeEventListener('error', onError); img.removeEventListener('load', onLoad);} };
-
-    img.addEventListener('error', onError);
-    img.addEventListener('load', onLoad);
-
-    // Initial proactive check (in case error fired before listeners attached or srcset picked a missing asset)
-    if(needsFallback()){
-      tryNext();
-    }
-  });
-})();
+/* ====== CAROUSEL (ARROWS + AUTOPLAY) ====== */
 
 /* ====== CAROUSEL (ARROWS + AUTOPLAY) ====== */
 document.querySelectorAll('.carousel-wrap').forEach(wrap=>{
