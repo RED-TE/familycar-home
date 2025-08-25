@@ -1,408 +1,130 @@
-<!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>관리자 | 패밀리오토플랜 문의 관리</title>
-<meta name="color-scheme" content="light only"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#ffffff; --card:#f8fafc; --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.08);
-  --brand:#16a34a; --accent:#0ea5e9; --red:#ef4444; --amber:#f59e0b; --ok:#10b981;
-  --radius:14px; --shadow:0 10px 26px rgba(0,0,0,.08);
-}
-*{box-sizing:border-box} body{margin:0;background:#fff;color:var(--text);font:14.5px/1.6 "Noto Sans KR",system-ui}
-a{color:inherit;text-decoration:none}
-.container{width:min(1200px,94%);margin:0 auto}
-
-.header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
-.header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-.brand{font-weight:900;display:flex;gap:.55rem;align-items:center}
-.badge{font-size:12px;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;color:#065f46;background:rgba(34,197,94,.10)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.toolbar{margin:14px 0;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
-.toolbar .filters{display:flex;gap:8px;flex-wrap:wrap}
-.toolbar input[type="search"]{width:100%;padding:.8rem 1rem;border-radius:10px;border:1px solid var(--line);background:#fff}
-.btn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:#fff;padding:.7rem 1rem;border-radius:10px;font-weight:800;cursor:pointer}
-.btn.primary{background:var(--brand);color:#fff;border-color:transparent}
-.btn.danger{background:#fff;color:#b91c1c;border-color:#fecaca}
-.btn.small{padding:.45rem .7rem;font-weight:700;border-radius:8px}
-.select{padding:.7rem .9rem;border:1px solid var(--line);border-radius:10px;background:#fff}
-
-.table{overflow:auto;border-radius:var(--radius);border:1px solid var(--line)}
-table{width:100%;border-collapse:collapse;background:#fff}
-th,td{padding:10px;border-bottom:1px solid #eef2f7;vertical-align:top}
-th{white-space:nowrap;text-align:left;background:#f9fafb;font-weight:800;color:#334155}
-tbody tr:hover{background:#fcfdfd}
-.status{display:inline-flex;align-items:center;gap:.35rem;font-weight:800;border-radius:999px;padding:.2rem .55rem;border:1px solid var(--line)}
-.status.new{background:#ecfeff;color:#0369a1}
-.status.in_progress{background:#fff7ed;color:#9a3412}
-.status.done{background:#ecfdf5;color:#065f46}
-.status.absent{background:#f1f5f9;color:#1e293b}
-.status.potential{background:#fefce8;color:#854d0e}
-.status.rejected{background:#fef2f2;color:#991b1b}
-.status.contract{background:#ecfdf5;color:#047857}
-.kv{display:flex;gap:6px;flex-wrap:wrap}
-.kv b{color:#334155}
-
-.login{min-height:100dvh;display:grid;place-items:center}
-.login .panel{width:min(420px,94%);padding:18px}
-.login h1{margin:0 0 8px}
-.login p{color:var(--muted);margin-top:0}
-
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:20px;z-index:20}
-.modal .panel{width:min(720px,94%);padding:18px}
-.modal .actions{text-align:right;margin-top:12px}
-textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem}
-</style>
-</head>
-<body>
-
-<div id="app">
-  <!-- 로그인 -->
-  <section class="login" id="loginView">
-    <div class="container">
-      <div class="card panel">
-        <h1>관리자 로그인</h1>
-        <p>승인된 관리자만 접근 가능합니다.</p>
-        <div style="display:grid;gap:10px">
-          <input id="email" type="email" placeholder="이메일" />
-          <input id="password" type="password" placeholder="비밀번호" />
-          <button class="btn primary" id="btnLogin">로그인</button>
-        </div>
-        <div id="loginMsg" style="color:#b91c1c;margin-top:8px"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- 대시보드 -->
-  <section id="dashView" style="display:none">
-    <div class="header">
-      <div class="container row">
-        <div class="brand">📊 문의 대시보드 <span class="badge" id="userBadge">-</span></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" id="btnExport">CSV 내보내기</button>
-          <button class="btn danger" id="btnLogout">로그아웃</button>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-      <div class="toolbar">
-        <input type="search" id="q" placeholder="이름/연락처/브랜드/상품 검색…" />
-        <select id="dateRange" class="select">
-          <option value="all">전체기간</option>
-          <option value="today">오늘</option>
-          <option value="7d">최근 7일</option>
-        </select>
-        <select id="status" class="select">
-          <option value="all">전체상태</option>
-          <option value="new">신규</option>
-          <option value="in_progress">진행중</option>
-          <option value="done">완료</option>
-        </select>
-        <div class="filters">
-          <select id="pageSize" class="select">
-            <option>20</option><option>50</option><option>100</option>
-          </select>
-          <button class="btn" id="btnRefresh">새로고침</button>
-        </div>
-      </div>
-
-      <div class="table card">
-        <table id="tbl">
-          <thead>
-            <tr>
-              <th>작성</th>
-              <th>고객</th>
-              <th>연락처</th>
-              <th>브랜드/상품</th>
-              <th>차종/조건</th>
-              <th>메모</th>
-              <th>상태</th>
-              <th>작업</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div id="loading" style="display:none;margin:10px 0;color:#64748b">불러오는 중…</div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 40px">
-        <div id="count"></div>
-        <div style="display:flex;gap:6px">
-          <button class="btn small" id="prev">이전</button>
-          <button class="btn small" id="next">다음</button>
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
-
-<!-- 메모 모달 -->
-<div class="modal" id="memoModal">
-  <div class="card panel">
-    <h3 style="margin-top:0">메모 업데이트</h3>
-    <textarea id="memoText" placeholder="메모를 입력하세요"></textarea>
-    <div class="actions">
-      <button class="btn" data-close>취소</button>
-      <button class="btn primary" id="saveMemo">저장</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="detailModal">
-  <div class="card panel">
-    <h3 style="margin-top:0">문의 상세</h3>
-    <div id="detailBody" style="white-space:pre-wrap"></div>
-    <div class="actions">
-      <button class="btn" data-close>닫기</button>
-    </div>
-  </div>
-</div>
-
 <script type="module">
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-// ===== Mock mode: DB 없이 화면 개발용 =====
-const USE_MOCK = false; // true면 Supabase 대신 아래 MOCK 데이터로 표를 그림
-const MOCK = [
-  {
-    id: "11111111-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
-    created_at: "2025-08-24T12:30:00Z",
-    name: "김철수",
-    phone: "01012345678",
-    brand: "현대",
-    product: "장기렌트",
-    model: "쏘나타",
-    terms: "48개월 / 2만km",
-    message: "출퇴근용으로 보고 있습니다.",
-    referrer: "google",
-    user_agent: "Mozilla/5.0",
-    page: "/inquiry",
-    status: "new",
-    memo: ""
-  },
-  {
-    id: "22222222-bbbb-4bbb-bbbb-bbbbbbbbbbbb",
-    created_at: "2025-08-24T13:10:00Z",
-    name: "이영희",
-    phone: "01098765432",
-    brand: "기아",
-    product: "리스",
-    model: "카니발",
-    terms: "60개월 / 3만km",
-    message: "패밀리카로 알아보고 있습니다.",
-    referrer: "naver",
-    user_agent: "Mozilla/5.0",
-    page: "/event",
-    status: "in_progress",
-    memo: "가격 상담 진행 중"
-  },
-  {
-    id: "33333333-cccc-4ccc-cccc-cccccccccccc",
-    created_at: "2025-08-24T14:05:00Z",
-    name: "박민수",
-    phone: "01055557777",
-    brand: "BMW",
-    product: "장기렌트",
-    model: "5시리즈",
-    terms: "36개월 / 1.5만km",
-    message: "법인 명의로 진행 원함",
-    referrer: "direct",
-    user_agent: "Mozilla/5.0",
-    page: "/",
-    status: "done",
-    memo: "계약 완료"
-  },
-  {
-    id: "44444444-dddd-4ddd-dddd-dddddddddddd",
-    created_at: "2025-08-24T15:20:00Z",
-    name: "정은지",
-    phone: "01022223333",
-    brand: "테슬라",
-    product: "리스",
-    model: "Model Y",
-    terms: "48개월 / 2만km",
-    message: "전기차 충전 혜택도 궁금합니다.",
-    referrer: "instagram",
-    user_agent: "Mozilla/5.0",
-    page: "/promotion",
-    status: "new",
-    memo: ""
-  },
-  {
-    id: "55555555-eeee-4eee-eeee-eeeeeeeeeeee",
-    created_at: "2025-08-24T16:45:00Z",
-    name: "한지훈",
-    phone: "01066668888",
-    brand: "벤츠",
-    product: "장기렌트",
-    model: "E-Class",
-    terms: "60개월 / 2만km",
-    message: "초기 비용 최소화 조건으로 알고 싶습니다.",
-    referrer: "facebook",
-    user_agent: "Mozilla/5.0",
-    page: "/inquiry",
-    status: "in_progress",
-    memo: "견적 발송 완료"
-  }
-];
+/* =========================
+   Firebase 관리자판 버전
+   ========================= */
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-app.js';
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+} from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-auth.js';
+import {
+  getFirestore, collection, getDocs, query, orderBy, limit, startAfter,
+  where, updateDoc, doc, getDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.4/firebase-firestore.js';
 
-const SUPABASE_URL  = 'https://juktgtdtcecuehfjtjx.supabase.co';
-const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp1a3R0Z2RkdGNlY3VoZWZ0anR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU1MTc0MzksImV4cCI6MjA3MTA5MzQzOX0.mIRMntQU9ncbUm_h0hRSA1TWx-XLu51nsXDuA3wSGW8';
-const supa = createClient(SUPABASE_URL, SUPABASE_ANON);
-const DEV_BYPASS = false; // TEMP: 로그인 없이 관리자 화면 진입 (테스트용)
+/* 1) 여기에 너의 firebaseConfig 붙여넣기 */
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "YOUR_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
+initializeApp(firebaseConfig);
+const auth = getAuth();
+const db   = getFirestore();
 
+/* === 기존 DOM 참조 === */
 const loginView = document.getElementById('loginView');
 const dashView  = document.getElementById('dashView');
 const loginMsg  = document.getElementById('loginMsg');
 const userBadge = document.getElementById('userBadge');
 
+const qEl        = document.getElementById('q');
+const statusEl   = document.getElementById('status');
+const pageSizeEl = document.getElementById('pageSize');
+const dateRangeEl= document.getElementById('dateRange');
+const loadingEl  = document.getElementById('loading');
+const countEl    = document.getElementById('count');
+const tbody      = document.querySelector('#tbl tbody');
+
+let page = 1, total = 0;
+let currentRows = [];         // 클라이언트에 모아둔 데이터(간편 페이지네이션)
+let rawDocs = [];             // Firestore 문서 스냅샷(상세/업데이트에 사용)
+
+/* === 로그인/로그아웃 === */
 document.getElementById('btnLogin').addEventListener('click', async ()=>{
   loginMsg.textContent = '';
-  if (DEV_BYPASS) {
-    userBadge.textContent = '개발모드(로그인없음)';
-    showDash();
-    return;
-  }
   const email = (document.getElementById('email').value||'').trim();
   const password = document.getElementById('password').value||'';
-  const { data, error } = await supa.auth.signInWithPassword({ email, password });
-  if(error){ loginMsg.textContent = error.message; return; }
-  await checkRoleAndShow();
-});
-
-document.getElementById('btnLogout').addEventListener('click', async ()=>{
-  if (DEV_BYPASS) { location.reload(); return; }
-  await supa.auth.signOut();
-  location.reload();
-});
-
-async function checkRoleAndShow(){
-  if (DEV_BYPASS) {
-    userBadge.textContent = '개발모드(로그인없음)';
-    showDash();
-    return;
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged 에서 화면 전환
+  } catch (e) {
+    loginMsg.textContent = e.message || '로그인 실패';
   }
-  const { data: { user } } = await supa.auth.getUser();
-  if(!user){ showLogin(); return; }
-  // 관리자 여부 확인
-  const { data: roles } = await supa.from('user_roles').select('role').eq('user_id', user.id).maybeSingle();
-  if(!roles || roles.role !== 'admin'){ loginMsg.textContent='관리자 권한이 없습니다.'; await supa.auth.signOut(); showLogin(); return; }
-  userBadge.textContent = user.email;
-  showDash();
-}
+});
+document.getElementById('btnLogout').addEventListener('click', async ()=>{
+  await signOut(auth); location.reload();
+});
+onAuthStateChanged(auth, async (user)=>{
+  if (user) { userBadge.textContent = user.email || '관리자';
+              showDash(); }
+  else { showLogin(); }
+});
 
 function showLogin(){ loginView.style.display='grid'; dashView.style.display='none'; }
-function showDash(){ loginView.style.display='none'; dashView.style.display='block'; load(); }
+function showDash(){  loginView.style.display='none'; dashView.style.display='block'; load(); }
 
-const q = document.getElementById('q');
-const status = document.getElementById('status');
-const pageSize = document.getElementById('pageSize');
-const dateRange = document.getElementById('dateRange');
-const loadingEl = document.getElementById('loading');
-const countEl = document.getElementById('count');
-const tbody = document.querySelector('#tbl tbody');
-let page=1, total=0;
-
-document.getElementById('btnRefresh').onclick = ()=>{ page=1; load(); }
-document.getElementById('prev').onclick = ()=>{ if(page>1){ page--; load(); } }
-document.getElementById('next').onclick = ()=>{ if(page*Number(pageSize.value) < total){ page++; load(); } }
-q.oninput = debounce(()=>{ page=1; load(); }, 300);
-status.onchange = ()=>{ page=1; load(); }
-pageSize.onchange = ()=>{ page=1; load(); }
-dateRange.onchange = ()=>{ page=1; load(); };
-
+/* === 목록 로딩 ===
+   - 간단히: 조건으로 Firestore에서 최대 500건 가져와
+   - 화면에서 검색/필터/페이지네이션은 클라이언트에서 처리 */
 async function load(){
-  if (USE_MOCK) {
-    loadingEl.style.display = 'block';
-    const from = (page-1)*Number(pageSize.value);
-    const to   = from + Number(pageSize.value) - 1;
-
-    let rows = [...MOCK];
-
-    // 상태 필터
-    if (status.value !== 'all') {
-      rows = rows.filter(r => r.status === status.value);
-    }
-
-    // 텍스트 검색
-    const s = q.value.trim();
-    if (s) {
-      const S = s.toLowerCase();
-      rows = rows.filter(r => [
-        r.name, r.phone, r.brand, r.product, r.model, r.terms, r.message
-      ].some(v => (v||'').toString().toLowerCase().includes(S)));
-    }
-
-    // 날짜 범위
-    const now = new Date();
-    if (dateRange.value === 'today') {
-      const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      rows = rows.filter(r => new Date(r.created_at) >= start);
-    } else if (dateRange.value === '7d') {
-      const start = new Date(now.getTime() - 7*24*60*60*1000);
-      rows = rows.filter(r => new Date(r.created_at) >= start);
-    }
-
-    // 최신순 정렬 + 페이지 자르기
-    rows.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
-    total = rows.length;
-    const pageRows = rows.slice(from, to+1);
-
-    renderRows(pageRows);
-    countEl.textContent = `총 ${total}건 · ${page}/${Math.max(1, Math.ceil(total/Number(pageSize.value)))}페이지`;
-    loadingEl.style.display = 'none';
-    return; // 여기서 끝! 아래 Supabase 쿼리는 타지 않음
-  }
   loadingEl.style.display = 'block';
-  const from=(page-1)*Number(pageSize.value);
-  const to=from+Number(pageSize.value)-1;
 
-  let query = supa.from('inquiries')
-    .select('*', { count:'exact' })
-    .order('created_at', { ascending:false })
-    .range(from, to);
-
-  if(status.value!=='all') query = query.eq('status', status.value);
-  if(q.value.trim()){
-    const s = q.value.trim();
-    query = query.or(`name.ilike.%${s}%,phone.ilike.%${s}%,brand.ilike.%${s}%,product.ilike.%${s}%`);
-  }
-
-  // 날짜 범위 필터
+  // Firestore 기본 쿼리
+  let cond = [ orderBy('created_at','desc') ];
+  // 날짜 범위
   const now = new Date();
-  if(dateRange.value === 'today'){
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    query = query.gte('created_at', start.toISOString());
-  } else if(dateRange.value === '7d'){
-    const start = new Date(now.getTime() - 7*24*60*60*1000);
-    query = query.gte('created_at', start.toISOString());
+  if (dateRangeEl.value === 'today') {
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+    cond.push(where('created_at','>=', start));
+  } else if (dateRangeEl.value === '7d') {
+    const start = new Date(now.getTime() - 7*24*3600*1000).toISOString();
+    cond.push(where('created_at','>=', start));
+  }
+  // 상태 필터
+  if (statusEl.value !== 'all') {
+    cond.push(where('status','==', statusEl.value));
   }
 
-  const { data, count, error } = await query;
-  if(error){
-    loadingEl.style.display = 'none';
-    alert('로딩 오류: '+error.message);
-    return;
+  const baseQ = query(collection(db,'inquiries'), ...cond, limit(500)); // 최대 500
+  const snap = await getDocs(baseQ);
+
+  // 캐시
+  rawDocs = snap.docs;
+  currentRows = rawDocs.map(d=>{
+    const r = d.data();
+    return { ...r, id: d.id };
+  });
+
+  // 텍스트 검색 (이름/연락처/브랜드/상품/모델/조건/메시지)
+  const s = qEl.value.trim().toLowerCase();
+  if (s) {
+    currentRows = currentRows.filter(r => [
+      r.name, r.phone, r.brand, r.product, r.model, r.terms, r.message
+    ].some(v => (v||'').toString().toLowerCase().includes(s)));
   }
-  total = count||0;
-  renderRows(data||[]);
-  countEl.textContent = `총 ${total}건 · ${page}/${Math.max(1, Math.ceil(total/Number(pageSize.value)))}페이지`;
+
+  // 최신순 정렬(안전)
+  currentRows.sort((a,b)=> new Date(b.created_at) - new Date(a.created_at));
+
+  total = currentRows.length;
+  page  = 1; // 첫 페이지부터
+  renderPage();
   loadingEl.style.display = 'none';
 }
 
-function fmtPhone(s){
-  if(!s) return '';
-  const d = (s+'').replace(/\D/g,'');
-  if(d.length === 10) return d.replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
-  if(d.length === 11) return d.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-  return s;
+function renderPage(){
+  const size = Number(pageSizeEl.value);
+  const from = (page-1)*size;
+  const to   = from + size;
+  const pageRows = currentRows.slice(from, to);
+  renderRows(pageRows);
+  countEl.textContent = `총 ${total}건 · ${page}/${Math.max(1, Math.ceil(total/size))}페이지`;
 }
 
+/* === 테이블 렌더 === */
 function renderRows(rows){
   tbody.innerHTML = '';
   for(const r of rows){
@@ -422,26 +144,39 @@ function renderRows(rows){
       </td>
       <td>
         <select data-status="${r.id}" class="select">
-          <option value="absent" ${r.status==='absent'?'selected':''}>부재</option>
+          <option value="absent"    ${r.status==='absent'?'selected':''}>부재</option>
           <option value="potential" ${r.status==='potential'?'selected':''}>가망</option>
-          <option value="rejected" ${r.status==='rejected'?'selected':''}>부결</option>
-          <option value="contract" ${r.status==='contract'?'selected':''}>계약</option>
+          <option value="rejected"  ${r.status==='rejected'?'selected':''}>부결</option>
+          <option value="contract"  ${r.status==='contract'?'selected':''}>계약</option>
         </select>
       </td>
-      <td>
-        <button class="btn small" data-detail="${r.id}">상세</button>
-      </td>`;
+      <td><button class="btn small" data-detail="${r.id}">상세</button></td>`;
     tbody.appendChild(tr);
   }
 }
 
-// 이벤트 위임
+/* === 이벤트들 === */
+document.getElementById('btnRefresh').onclick = ()=>{ page=1; load(); }
+document.getElementById('prev').onclick = ()=>{ if(page>1){ page--; renderPage(); } }
+document.getElementById('next').onclick = ()=>{ const size=Number(pageSizeEl.value);
+  if(page*size < total){ page++; renderPage(); } }
+qEl.oninput        = debounce(()=>{ load(); }, 300);
+statusEl.onchange  = ()=>{ load(); }
+pageSizeEl.onchange= ()=>{ page=1; renderPage(); }
+dateRangeEl.onchange=()=>{ load(); }
+
 tbody.addEventListener('click', async (e)=>{
-  const copyBtn = e.target.closest('[data-copy]');
-  if(copyBtn){ await navigator.clipboard.writeText(copyBtn.dataset.copy||''); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='복사',1200); }
+  const btn = e.target.closest('[data-copy]');
+  if(btn){ await navigator.clipboard.writeText(btn.dataset.copy||'');
+           btn.textContent='복사됨'; setTimeout(()=>btn.textContent='복사',1200); }
 
   const detailBtn = e.target.closest('[data-detail]');
-  if(detailBtn){ const id=detailBtn.dataset.detail; const { data, error } = await supa.from('inquiries').select('*').eq('id', id).maybeSingle(); if(error) return alert(error.message); showDetail(data); }
+  if(detailBtn){
+    const id = detailBtn.dataset.detail;
+    const d  = rawDocs.find(x=>x.id===id);
+    if(!d){ alert('데이터 없음'); return; }
+    showDetail({ id, ...d.data() });
+  }
 
   const memoBtn = e.target.closest('[data-memo]');
   if(memoBtn){ openMemo(memoBtn.dataset.memo); }
@@ -449,13 +184,16 @@ tbody.addEventListener('click', async (e)=>{
 
 tbody.addEventListener('change', async (e)=>{
   const sel = e.target.closest('select[data-status]');
-  if(sel){
-    const id = sel.dataset.status;
-    const { error } = await supa.from('inquiries').update({ status: sel.value }).eq('id', id);
-    if(error){ alert(error.message); await load(); }
+  if(!sel) return;
+  try {
+    await updateDoc(doc(db,'inquiries', sel.dataset.status), { status: sel.value });
+  } catch(err){
+    alert('상태 업데이트 실패: '+(err.message||err));
+    load();
   }
 });
 
+/* === 상세/메모 === */
 function showDetail(r){
   const detail = [
     `작성: ${fmtDate(r.created_at)}`,
@@ -475,16 +213,15 @@ function showDetail(r){
   document.getElementById('detailBody').textContent = detail;
   document.getElementById('detailModal').style.display = 'flex';
 }
-
-// 메모 모달
 const memoModal=document.getElementById('memoModal');
 let memoTargetId=null;
 function openMemo(id){ memoTargetId=id; (document.getElementById('memoText').value=''); memoModal.style.display='flex'; }
 document.getElementById('saveMemo').onclick = async ()=>{
-  if(!memoTargetId) return (memoModal.style.display='none');
+  if(!memoTargetId){ memoModal.style.display='none'; return; }
   const memo = document.getElementById('memoText').value||'';
-  const { error } = await supa.from('inquiries').update({ memo }).eq('id', memoTargetId);
-  if(error) alert(error.message);
+  try{
+    await updateDoc(doc(db,'inquiries', memoTargetId), { memo });
+  }catch(e){ alert('메모 저장 실패: '+(e.message||e)); }
   memoModal.style.display='none'; load();
 };
 document.addEventListener('click', (e)=>{
@@ -495,35 +232,35 @@ document.addEventListener('click', (e)=>{
   }
 });
 
-document.getElementById('btnExport').onclick = async ()=>{
-  // 간단 CSV (최대 5,000건)
-  const { data, error } = await supa.from('inquiries').select('*').order('created_at', { ascending:false }).limit(5000);
-  if(error){ alert(error.message); return; }
-  const csv = toCSV(data||[]);
-  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=`inquiries_${Date.now()}.csv`; a.click();
-  URL.revokeObjectURL(url);
-};
-
-function toCSV(rows){
-  if(!rows.length) return '';
+/* === CSV 내보내기 === */
+document.getElementById('btnExport').onclick = ()=>{
+  const rows = currentRows;
   const cols = ['created_at','name','phone','brand','product','model','terms','message','status','referrer','utm','user_agent','page','memo','id'];
   const header = cols.join(',');
-  const lines = rows.map(r => cols.map(c => {
+  const lines = rows.map(r => cols.map(c=>{
     let v = r[c];
     if(typeof v === 'object' && v !== null) v = JSON.stringify(v);
     v = (v ?? '').toString().replaceAll('"','""');
     return `"${v}"`;
   }).join(','));
-  return [header, ...lines].join('\n');
-}
+  const csv = [header, ...lines].join('\n');
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a'); a.href=url; a.download=`inquiries_${Date.now()}.csv`; a.click();
+  URL.revokeObjectURL(url);
+};
 
+/* === 유틸 === */
 function esc(s){ return (s??'').toString().replace(/[&<>\"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
 function fmtDate(s){ try{ const d=new Date(s); return d.toLocaleString('ko-KR'); }catch(_){ return s; } }
+function fmtPhone(s){
+  if(!s) return '';
+  const d = (s+'').replace(/\D/g,'');
+  if(d.length === 10) return d.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3');
+  if(d.length === 11) return d.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3');
+  return s;
+}
 function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
 
-checkRoleAndShow();
+/* 초기 진입은 auth 상태 리스너(onAuthStateChanged)가 처리 */
 </script>
-</body>
-</html>
