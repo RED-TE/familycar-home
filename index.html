@@ -813,30 +813,43 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
   </div>
 </footer>
 
-<script type="module" id="supabaseModule">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-  // TODO: 환경변수 대체
-  const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-  const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY';
-  const supa = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth: { persistSession: false } });
+<script type="module" id="firebaseModule">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-  // 공개 쓰기만 허용되고 읽기는 관리자만 가능한 RLS 전제로 동작합니다.
-  window.__submitInquiry = async (payload)=>{
-    const { error } = await supa.from('inquiries').insert({
+  // ✅ Firebase 프로젝트 설정 (사용자가 제공한 값)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+    authDomain: "familycar-home.firebaseapp.com",
+    projectId: "familycar-home",
+    storageBucket: "familycar-home.firebasestorage.app",
+    messagingSenderId: "69504878653",
+    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+    measurementId: "G-YXV83SLSD0"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+
+  // 🔌 index의 기존 폼(submit) 로직(handleSubmit)이 호출하는 훅
+  //    window.__submitInquiry(payload)를 Firebase로 구현
+  window.__submitInquiry = async (payload) => {
+    const data = {
       name: payload.name,
       phone: payload.phone,
-      brand: payload.brand,
-      product: payload.product,
-      model: payload.model,
-      terms: payload.terms,
-      message: payload.message,
-      utm: payload.utm || {},
-      referrer: payload.referrer || null,
-      user_agent: payload.user_agent || null,
-      page: payload.page || null,
-      status: 'new'
-    });
-    if(error) throw error;
+      brand: payload.brand || null,
+      product: payload.product || null,
+      model: payload.model || null,
+      terms: payload.terms || null,
+      message: payload.message || null,
+      status: "new",
+      createdAt: serverTimestamp(),
+      page: payload.page || location.pathname,
+      userAgent: payload.user_agent || navigator.userAgent,
+      utm: payload.utm || {}
+    };
+    await addDoc(collection(db, "inquiries"), data);
     return true;
   };
 </script>
