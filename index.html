@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <base href="./">
-<title>패밀리오토플랜 | 장기렌트·리스 최저가 견적</title>
+<title>패밀리오토플랜 | 장기렌트·리스 특가 견적</title>
 <meta name="description" content="장기렌트·리스 비교, 한 눈에. 투명 견적·빠른 출고·맞춤 조건으로 최적의 선택을 제안합니다." />
 <meta name="theme-color" content="#16a34a" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,10 +44,10 @@ header{position:sticky;top:0;z-index:70;background:rgba(255,255,255,.85);backdro
 header.scrolled .nav{padding:8px 0}
 .brand{display:flex;align-items:center;gap:.55rem;font-weight:900}
 .logo{
-  height:30px; width:auto; display:block; object-fit:contain; border-radius:0;
+  height:40px; width:auto; display:block; object-fit:contain; border-radius:0;
 }
-@media (min-width: 860px){ .logo{height:34px} }
-@media (min-width: 1200px){ .logo{height:38px} }
+@media (min-width: 860px){ .logo{height:46px} }
+@media (min-width: 1200px){ .logo{height:52px} }
 .menu{display:flex;gap:1.1rem;align-items:center}
 .menu a{color:var(--muted);position:relative}
 .menu a.active::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--brand),#34d399)}
@@ -130,12 +130,45 @@ header.scrolled .nav{padding:8px 0}
 /* =========================
    QUICK QUOTE (sticky)
 ========================= */
-.quick{position:sticky;top:62px;z-index:65;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.quick form{display:grid;grid-template-columns:repeat(6,1fr);gap:.6rem;align-items:end;padding:.72rem 0}
-.quick label{display:flex;flex-direction:column;gap:.25rem;font-size:12px;color:var(--muted)}
-.quick input,.quick select{padding:.86rem .95rem;border-radius:10px;border:1px solid var(--line);background:#fff;color:var(--text)}
-.quick button{padding:1rem 1.1rem;border:none;border-radius:12px;background:var(--brand);color:#fff;font-weight:900;box-shadow:var(--shadow-sm)}
-.quick button:hover{background:var(--brand-2)}
+  .quick{
+    position:sticky; top:62px; z-index:65;
+    /* soften the background and make it feel airy */
+    background:linear-gradient(90deg, rgba(22,163,74,.14) 0%, rgba(34,197,94,.14) 50%, rgba(14,165,233,.12) 100%);
+    color:#0f172a;
+    border-top:0; border-bottom:0;
+    box-shadow:0 10px 22px rgba(6,95,70,.18);
+  }
+  .quick .container{
+    position:relative;
+    background:rgba(255,255,255,.96);
+    border:2px solid rgba(6,95,70,.28);
+    border-radius:14px;
+    padding:14px 16px;
+    box-shadow:0 16px 36px rgba(6,95,70,.22);
+  }
+  .quick .title{
+    position:absolute; left:18px; top:-12px;
+    background:linear-gradient(90deg,#16a34a,#22c55e);
+    color:#fff; font-weight:900; letter-spacing:.2px;
+    padding:.35rem .7rem; border-radius:999px;
+    box-shadow:0 8px 18px rgba(34,197,94,.35);
+  }
+.quick form{
+  display:grid; grid-template-columns:repeat(6,1fr);
+  gap:.6rem; align-items:end; padding-top:.2rem; margin-top:.4rem;
+}
+  .quick label{display:flex;flex-direction:column;gap:.25rem;font-size:12px;color:#475569}
+.quick input,.quick select{
+  padding:.86rem .95rem; border-radius:10px;
+  border:1px solid var(--line); background:#fff; color:#0f172a;
+}
+  .quick button{
+    padding:1rem 1.1rem; border:none; border-radius:12px;
+    background:linear-gradient(90deg,#16a34a,#22c55e);
+    color:#fff; font-weight:900;
+    box-shadow:0 10px 26px rgba(34,197,94,.35);
+  }
+.quick button:hover{filter:brightness(1.05)}
 @media (max-width: 980px){.quick form{grid-template-columns:1fr 1fr 1fr 1fr}.quick .hide-md{display:none}}
 @media (max-width: 680px){.quick form{grid-template-columns:1fr 1fr}.quick .hide-sm{display:none}}
 
@@ -170,8 +203,18 @@ header.scrolled .nav{padding:8px 0}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-sm);transition:transform .18s ease, box-shadow .18s ease}
 .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
 .vehicle{display:flex;flex-direction:column;gap:.6rem}
-.vehicle img{border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px;width:100%;aspect-ratio:16/9;object-fit:contain}
+.vehicle img{border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px;width:100%;aspect-ratio:16/9;height:220px;object-fit:contain}
 .vehicle .row{display:flex;justify-content:space-between;align-items:center}
+/* Deal style lines for vehicle cards (domestic spec view) */
+.deal{display:flex;flex-direction:column;gap:.45rem}
+.deal-title{margin:0;font-size:18px;font-weight:900}
+.deal-sub{margin:0;color:#64748b;font-size:13px}
+.deal-price{display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:14px}
+.deal-price .label{display:inline-block;min-width:64px;color:#475569}
+.deal-price b{font-weight:900}
+.deal-price .highlight{color:#b91c1c}
+.deal-meta{display:flex;gap:.4rem}
+.chip{display:inline-flex;align-items:center;gap:.25rem;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;font-size:12px;color:#334155;background:#fff}
 .price{font-weight:900}
 
 /* Carousel (모바일 스크롤/데스크탑 카드형 공용) */
@@ -182,9 +225,27 @@ header.scrolled .nav{padding:8px 0}
 .carousel-btn:hover{box-shadow:var(--shadow-md)}
 .carousel-btn.prev{left:-6px}.carousel-btn.next{right:-6px}
 /* Carousel arrows visibility (hover to show on desktop) */
+
 .carousel-wrap .carousel-btn{opacity:0; pointer-events:none; transition:opacity .2s ease}
 @media (hover:hover){ .carousel-wrap:hover .carousel-btn, .carousel-wrap:focus-within .carousel-btn{opacity:1; pointer-events:auto} }
 @media (hover:none){ .carousel-wrap .carousel-btn{opacity:1; pointer-events:auto} }
+
+/* ===== Import section: desktop shows big grid like BEST, mobile keeps carousel ===== */
+@media (min-width: 980px){
+  /* Turn the import carousel into a 3-column grid */
+  #import .carousel{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    overflow: visible;           /* remove horizontal scrolling on desktop */
+    grid-auto-flow: initial;
+    grid-auto-columns: unset;
+  }
+  #import .carousel > *{ scroll-snap-align: unset; }
+
+  /* Hide nav arrows on desktop since it's a grid now */
+  #import .carousel-wrap .carousel-btn{ display: none; }
+}
 
 /* =========================
    COMPARE / STEPS / STATS
@@ -219,7 +280,7 @@ header.scrolled .nav{padding:8px 0}
 /* =========================
    FORMS (Contact)
 ========================= */
-input, textarea, select{
+input:not([type="checkbox"]):not([type="radio"]), textarea, select{
   width:100%;
   padding:1rem 1.05rem;
   border-radius:12px;
@@ -235,14 +296,26 @@ input:focus, textarea:focus, select:focus{
 ::placeholder{color:#94a3b8}
 textarea{min-height:120px; resize:vertical}
 
-.form-card{
-  width:min(760px,100%);
-  margin:8px auto 0;
+  .form-card{
+    position:relative;
+    width:min(760px,100%);
+    margin:8px auto 0;
+    background:#f9fdf8;
+    color:#111827;
+    border:2px solid rgba(34,197,94,.25);
+    border-radius:16px;
+    padding:22px 22px 24px;
+    box-shadow:0 20px 48px rgba(34,197,94,.20);
+  }
+  .form-card::before{
+    content:""; position:absolute; inset:0 auto auto 0; height:4px; width:100%;
+    background:linear-gradient(90deg,#16a34a,#22c55e,#0ea5e9); border-radius:16px 16px 0 0;
+  }
+.form-card input,
+.form-card select,
+.form-card textarea {
   background:#fff;
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:18px;
-  box-shadow:var(--shadow-sm);
+  color:#111;
 }
 .form-grid{
   display:grid;
@@ -262,12 +335,39 @@ textarea{min-height:120px; resize:vertical}
   .form-grid{ grid-template-columns:1fr; }
 }
 
-/* Consent UI */
-.consents{display:flex;flex-direction:column;gap:.45rem;margin:.2rem 0 .6rem}
-.consent{display:flex;align-items:center;gap:.55rem;font-size:13px;color:#334155}
-.consent input[type="checkbox"]{appearance:none;width:18px;height:18px;border:1.5px solid #94a3b8;border-radius:4px;display:inline-grid;place-content:center;background:#fff;transition:border-color .15s ease, background .15s ease, box-shadow .15s ease}
-.consent input[type="checkbox"]:checked{background:var(--brand);border-color:var(--brand);box-shadow:0 0 0 2px rgba(34,197,94,.18)}
-.consent input[type="checkbox"]:checked::after{content:"✔";font-size:12px;color:#fff;line-height:1;transform:translateY(-1px)}
+/* Consent UI (smaller checkboxes + subtle highlight) */
+  .consents{
+    display:flex;flex-direction:row;flex-wrap:wrap;gap:.35rem .55rem;align-items:center;margin:.2rem 0 .6rem;
+    padding:.4rem .6rem;
+    background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.90));
+    border:1px solid rgba(15,23,42,.06); border-radius:10px;
+  }
+.consent{display:flex;align-items:center;gap:.45rem;font-size:12px;color:#334155}
+/* half-sized, consistent custom checkbox */
+.consents input[type="checkbox"]{
+  -webkit-appearance: none;
+  appearance: none;
+  width: 12px; height: 12px; /* half-sized */
+  padding: 0; margin: 0;
+  border: 1.4px solid #94a3b8;
+  border-radius: 4px;
+  display: inline-grid; place-content: center;
+  background: #fff;
+  line-height: 1; vertical-align: middle;
+  box-shadow: none; outline: none;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+.consents input[type="checkbox"]:checked{background:var(--brand);border-color:var(--brand);box-shadow:0 0 0 2px rgba(34,197,94,.18)}
+.consents input[type="checkbox"]:checked::after{
+  content: "✔";
+  font-size: 10px;
+  color: #fff;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+/* quick bar: slightly smaller text so it feels tucked-in, not detached */
+.quick .consent{font-size:12px}
+.quick .consents{margin:.2rem 0 0}
 .consent a.view{color:#64748b;text-decoration:underline;margin-left:.25rem}
 
 /* Simple modal */
@@ -344,6 +444,77 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 .section h2{position:relative;padding-bottom:6px}
 .section h2::after{content:"";display:block;width:56px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--brand),#34d399);margin-top:10px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+/* ===== 기존 코드 =====
+.form-card { padding:22px 22px 24px; }
+.consents input[type="checkbox"]{ width:12px; height:12px; }
+.deal-price .highlight{ font-size:inherit; }
+*/
+
+/* ===== 수정 코드 (가독성 개선) ===== */
+body{font:16.5px/1.7 "Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Arial,sans-serif}
+.lead{color:#334155;margin:0 0 26px;font-size:16px;line-height:1.7}
+
+.card{padding:18px;box-shadow:0 10px 28px rgba(0,0,0,.10)}
+
+.quick form{gap:.9rem}
+.quick input,.quick select{padding:1rem 1.05rem;border-radius:12px;font-size:15.5px}
+
+input:not([type="checkbox"]):not([type="radio"]), textarea, select{font-size:15.5px}
+
+.form-card{padding:24px 24px 26px}
+.form-grid{gap:14px}
+
+.consents{padding:.35rem .6rem}
+.consents input[type="checkbox"]{
+  -webkit-appearance:none;appearance:none;
+  width:11px;height:11px;
+  margin:0;padding:0;border:1.4px solid #94a3b8;border-radius:4px;
+  display:inline-grid;place-content:center;background:#fff;line-height:1;box-shadow:none
+}
+.consents input[type="checkbox"]:checked{background:#16a34a;border-color:#16a34a;box-shadow:0 0 0 2px rgba(34,197,94,.18)}
+.consents input[type="checkbox"]:checked::after{content:"✔";font-size:9px;color:#fff;transform:translateY(-1px)}
+.quick .consent{font-size:12px}
+
+.deal-title{font-size:20px;font-weight:900;margin:0}
+.deal-sub{margin:0;color:#475569;line-height:1.5;font-size:14px}
+.deal-price{padding-top:8px;margin-top:6px;border-top:1px solid #eef2f7;row-gap:6px;font-size:15.5px}
+.deal-price div{display:flex; align-items:baseline; gap:6px; white-space:nowrap}
+.deal-price b{font-variant-numeric:tabular-nums}
+/* avoid number wrapping on narrow cards */
+@media (max-width: 540px){
+  .deal-title{font-size:18px}
+  .deal-price{font-size:14px}
+  .deal-price .highlight{font-size:17px}
+}
+.deal-price .label{min-width:72px;display:inline-block;color:#64748b;font-weight:700}
+.deal-price .highlight{font-size:19px;color:#b91c1c;font-weight:900;font-size:21px;}
+.deal-meta{margin-top:6px}
+.chip{background:#f8fafc;border-color:#e5e7eb}
+
+/* === Vehicle card: make it look identical to the reference layout === */
+.vehicle{gap:.9rem}
+.vehicle .thumb{border-radius:14px;border:1px solid var(--line);background:#fff;padding:10px;width:100%;aspect-ratio:16/9;height:auto;object-fit:contain}
+.deal-sep{height:1px;background:#eef2f7;margin:8px 0}
+.deal-rows{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+.deal-rows .kv{display:flex;gap:8px;align-items:baseline;color:#475569;font-weight:800}
+.deal-rows .kv .label{color:#64748b;font-weight:900}
+.price-pill{display:inline-flex;align-items:center;justify-content:center;min-width:160px;padding:.9rem 1.1rem;border-radius:14px;border:1px solid rgba(16,185,129,.35);background:linear-gradient(180deg,#ecfdf5,#e7fbf1);box-shadow:0 6px 14px rgba(16,185,129,.18);font-weight:900;color:#065f46}
+.price-pill .num{font-size:22px;letter-spacing:.2px}
+.vehicle .actions{margin-top:10px}
+.vehicle .actions .btn{width:100%;justify-content:center;border:none;background:#16a34a;color:#fff;font-weight:900;border-radius:12px;padding:1rem 1.1rem;box-shadow:0 10px 26px rgba(34,197,94,.35)}
+
+.vehicle .actions .btn:hover{background:#22c55e}
+/* --- Vehicle price block: stacked '차량가' then '월납입' --- */
+.vehicle .deal-price{display:block;border-top:1px solid #eef2f7;padding-top:8px;margin-top:6px}
+.vehicle .deal-price > div{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:2px 0}
+.vehicle .deal-price .label{min-width:auto;color:#64748b;font-weight:900}
+.vehicle .deal-price .prev{color:#9ca3af;text-decoration:line-through;margin-right:8px}
+.vehicle .deal-price .highlight{color:#b91c1c;font-weight:900;font-size:21px}
+
+.vehicle .btn{background:#16a34a;color:#fff;border:none}
+.vehicle .btn:hover{background:#22c55e}
+
+footer{line-height:1.9}
 </style>
 
 <!-- STRUCTURED DATA -->
@@ -357,8 +528,10 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 <!-- Topbar -->
 <div class="topbar">
   <div class="container row">
-    <div>오늘 접수 시 <strong>빠른 출고 우선 매칭</strong></div>
-    <div>통합 상담 번호 <strong>1600-0000</strong></div>
+    <div>
+      오늘 접수 시 <strong>빠른 출고 우선 매칭</strong>
+      · <a href="#contact" style="text-decoration:underline">상담 접수</a>
+    </div>
   </div>
 </div>
 
@@ -367,7 +540,7 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
   <nav class="container nav" aria-label="주요">
     <a href="index.html" class="brand" aria-label="홈">
       <img class="logo" src="images/logo/logo_1.png" alt="" aria-hidden="true" />
-      <span>FAMILY AUTOPLAN</span>
+      <span>패밀리오토플랜</span>
     </a>
     <div class="menu" role="menubar">
       <a href="index.html#popular" role="menuitem">인기차종</a>
@@ -395,7 +568,7 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
         <span class="badge">개인/법인 맞춤</span>
       </div>
       <div class="btns">
-        <a class="btn primary" href="#contact">⚡ 최저가 견적 신청</a>
+        <a class="btn primary" href="#contact">⚡ 나만의 특가 견적 신청</a>
         <a class="btn ghost" href="#popular">인기차종 보기</a>
       </div>
     </div>
@@ -443,16 +616,13 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 <!-- Quick Quote -->
 <div class="quick">
   <div class="container">
+    <div class="title">빠른 견적문의</div>
     <form id="quickForm">
       <input type="text" name="homepage" autocomplete="off" tabindex="-1" style="position:absolute;left:-10000px;opacity:0;height:0;width:0">
       <input type="hidden" name="_ts" value="">
-      <label>성함
-        <input name="name" required placeholder="홍길동">
-      </label>
-      <label>연락처
-        <input type="tel" name="phone" required placeholder="010-1234-5678" inputmode="tel" autocomplete="tel" maxlength="13">
-      </label>
-      <label>브랜드
+
+      <label>
+        <span class="small">브랜드</span>
         <select name="brand">
           <option value="">브랜드 선택</option>
           <option>현대</option><option>기아</option><option>제네시스</option><option>쉐보레</option><option>르노코리아</option><option>KGM</option>
@@ -462,19 +632,55 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
           <option>테슬라</option><option>링컨</option><option>캐딜락</option><option>마세라티</option><option>BYD</option>
         </select>
       </label>
-      <label>상품선택
+
+      <label>
+        <span class="small">상품선택</span>
         <select name="product">
           <option value="">상품 선택</option>
           <option>장기렌트</option>
           <option>리스</option>
         </select>
       </label>
-      <label class="hide-sm">안내방법
-        <select name="contact">
-          <option>전화</option><option>문자</option><option>카카오톡</option>
-        </select>
+
+      <label>
+        <span class="small">이름</span>
+        <input type="text" name="name" placeholder="홍길동" required />
+        <span class="error" style="display:none;color:#ef4444;font-size:12px;margin-top:.25rem">이름을 입력해주세요.</span>
       </label>
-      <button type="submit">간편 견적문의</button>
+
+      <label>
+        <span class="small">연락처</span>
+        <input type="tel" name="phone" placeholder="010-1234-5678" required inputmode="tel" autocomplete="tel" maxlength="13" />
+        <span class="error" style="display:none;color:#ef4444;font-size:12px;margin-top:.25rem">연락처를 입력해주세요.</span>
+      </label>
+
+      <label>
+        <span class="small">차종</span>
+        <input type="text" name="model" placeholder="예: GV80, GLE300d 등" />
+      </label>
+
+      <label>
+        <span class="small">조건</span>
+        <input type="text" name="terms" placeholder="예: 48개월 / 연 2만km / 무보증" />
+      </label>
+
+      <label style="grid-column:1 / -1">
+        <span class="small">요청사항</span>
+        <textarea name="message" placeholder="원하는 색상/옵션, 등록지역 등"></textarea>
+      </label>
+
+      <div class="consents" style="grid-column:1 / -1">
+        <label class="consent">
+          <input type="checkbox" id="agree1" required>
+          <span>(필수) 개인정보 수집·이용·제공 동의 <a href="terms/privacyPolicy.html" class="view" target="_blank" rel="noopener">[보기]</a></span>
+        </label>
+        <label class="consent">
+          <input type="checkbox" id="agree2" required>
+          <span>(필수) 개인정보 제3자 제공 동의 <a href="terms/privacyPolicy.html" class="view" target="_blank" rel="noopener">[보기]</a></span>
+        </label>
+      </div>
+
+      <button type="submit" style="grid-column:1 / -1">특가 견적 신청하기</button>
     </form>
   </div>
 </div>
@@ -495,54 +701,120 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
   <div class="grid cols-3" id="vehicleGrid">
     <!-- 국산 SUV -->
     <div class="card vehicle reveal" data-tags="domestic suv">
-      <img src="images/cars/sorento.png" alt="기아 쏘렌토 2025">
-      <div class="row"><h3>기아 쏘렌토 (2025)</h3><span class="price">월 18만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/sorento.png" alt="기아 쏘렌토">
+      <div class="deal">
+        <h3 class="deal-title">쏘렌토</h3>
+        <p class="deal-sub">가솔린 터보 1.6 하이브리드 2WD 프레스티지 (5인승) (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>40,280,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">308,025원</span><span class="highlight">285,420원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
     <div class="card vehicle reveal" data-tags="domestic suv">
-      <img src="images/cars/sportage.png" alt="기아 스포티지 2025">
-      <div class="row"><h3>기아 스포티지 (2025)</h3><span class="price">월 18만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/santafe.png" alt="현대 싼타페">
+      <div class="deal">
+        <h3 class="deal-title">싼타페</h3>
+        <p class="deal-sub">가솔린 터보 1.6 하이브리드 2WD 익스클루시브 (5인승) (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>40,310,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">315,557원</span><span class="highlight">278,623원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
     <div class="card vehicle reveal" data-tags="domestic suv">
-      <img src="images/cars/santafe.png" alt="현대 싼타페 2025">
-      <div class="row"><h3>현대 싼타페 (2025)</h3><span class="price">월 23만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/carnival.png" alt="기아 카니발">
+      <div class="deal">
+        <h3 class="deal-title">카니발</h3>
+        <p class="deal-sub">가솔린 2.5 터보 7인승 시그니처 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>38,420,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">376,871원</span><span class="highlight">356,020원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
     <div class="card vehicle reveal" data-tags="domestic suv">
-      <img src="images/cars/carnival.png" alt="기아 카니발 2025">
-      <div class="row"><h3>기아 카니발 (2025)</h3><span class="price">월 25만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
-    </div>
-    <div class="card vehicle reveal" data-tags="domestic suv">
-      <img src="images/cars/gv80.png" alt="제네시스 GV80 2025">
-      <div class="row"><h3>제네시스 GV80 (2025)</h3><span class="price">월 38만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/gv80.png" alt="제네시스 GV80">
+      <div class="deal">
+        <h3 class="deal-title">GV80</h3>
+        <p class="deal-sub">가솔린 2.5T 2WD (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>75,000,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">624,450원</span><span class="highlight">595,300원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
 
     <!-- 국산 세단 -->
     <div class="card vehicle reveal" data-tags="domestic sedan">
-      <img src="images/cars/grandeur.png" alt="현대 그랜저 2025">
-      <div class="row"><h3>현대 그랜저 (2025)</h3><span class="price">월 27만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/grandeur.png" alt="현대 그랜저">
+      <div class="deal">
+        <h3 class="deal-title">그랜저</h3>
+        <p class="deal-sub">2.5 가솔린 프리미엄 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>37,490,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">284,300원</span><span class="highlight">267,900원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
     <div class="card vehicle reveal" data-tags="domestic sedan">
-      <img src="images/cars/avante.png" alt="현대 아반떼 2025">
-      <div class="row"><h3>현대 아반떼 (2025)</h3><span class="price">월 20만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/avante.png" alt="현대 아반떼">
+      <div class="deal">
+        <h3 class="deal-title">아반떼</h3>
+        <p class="deal-sub">1.6 가솔린 스마트 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>22,860,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">198,700원</span><span class="highlight">187,600원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
     <div class="card vehicle reveal" data-tags="domestic sedan">
-      <img src="images/cars/g80.png" alt="제네시스 G80 2025">
-      <div class="row"><h3>제네시스 G80 (2025)</h3><span class="price">월 60만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
+      <img class="thumb" src="images/cars/g80.png" alt="제네시스 G80">
+      <div class="deal">
+        <h3 class="deal-title">G80</h3>
+        <p class="deal-sub">가솔린 터보 2.5 2WD (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>58,900,000원</b></div>
+          <div><span class="label">월납입</span><span class="prev">519,062원</span><span class="highlight">470,175원</span></div>
+        </div>
+        <div class="deal-meta">
+          <span class="chip">48개월</span>
+          <span class="chip">선납금30%</span>
+        </div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
     </div>
 
-    <!-- 수입 SUV -->
-    <div class="card vehicle reveal" data-tags="import suv">
-      <img src="images/cars/XC60.png" alt="볼보 XC60">
-      <div class="row"><h3>볼보 XC60</h3><span class="price">월 60만원~</span></div>
-      <a class="btn ghost" href="#contact">상담신청</a>
-    </div>
   </div>
 </section>
 
@@ -556,29 +828,100 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
       <button class="carousel-btn next" aria-label="다음">&rarr;</button>
       <div class="carousel" id="importCarousel">
         <div class="card vehicle reveal">
-          <img src="images/cars/eclass.png" alt="벤츠 E-클래스">
-          <div class="row"><h3>벤츠 E-클래스</h3><span class="price">월 70만원~</span></div>
-          <a class="btn ghost" href="#contact">상담신청</a>
+          <img class="thumb" src="images/cars/eclass.png" alt="벤츠 E-클래스">
+          <div class="deal">
+            <h3 class="deal-title">벤츠 E-클래스</h3>
+            <p class="deal-sub">E 300 AVANTGARDE (가솔린) (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>79,600,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">705,000원</span><span class="highlight">703,900원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
         </div>
         <div class="card vehicle reveal">
-          <img src="images/cars/5series.png" alt="BMW 5시리즈">
-          <div class="row"><h3>BMW 5시리즈</h3><span class="price">월 68만원~</span></div>
-          <a class="btn ghost" href="#contact">상담신청</a>
+          <img class="thumb" src="images/cars/5series.png" alt="BMW 5시리즈">
+          <div class="deal">
+            <h3 class="deal-title">BMW 5시리즈</h3>
+            <p class="deal-sub">530i M Sport Package (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>76,500,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">685,000원</span><span class="highlight">683,300원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
         </div>
         <div class="card vehicle reveal">
-          <img src="images/cars/glc.png" alt="벤츠 GLC">
-          <div class="row"><h3>벤츠 GLC</h3><span class="price">월 62만원~</span></div>
-          <a class="btn ghost" href="#contact">상담신청</a>
+          <img class="thumb" src="images/cars/glc.png" alt="벤츠 GLC">
+          <div class="deal">
+            <h3 class="deal-title">벤츠 GLC</h3>
+            <p class="deal-sub">GLC 300 4MATIC (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>76,900,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">629,000원</span><span class="highlight">627,400원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
         </div>
         <div class="card vehicle reveal">
-          <img src="images/cars/sclass.png" alt="벤츠 S-클래스">
-          <div class="row"><h3>벤츠 S-클래스</h3><span class="price">월 55만원~</span></div>
-          <a class="btn ghost" href="#contact">상담신청</a>
+          <img class="thumb" src="images/cars/sclass.png" alt="벤츠 S-클래스">
+          <div class="deal">
+            <h3 class="deal-title">벤츠 S-클래스</h3>
+            <p class="deal-sub">S 500 4MATIC (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>162,300,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">1,095,000원</span><span class="highlight">1,093,200원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
         </div>
         <div class="card vehicle reveal">
-          <img src="images/cars/7series.png" alt="BMW 7시리즈">
-          <div class="row"><h3>BMW 7시리즈</h3><span class="price">월 58만원~</span></div>
-          <a class="btn ghost" href="#contact">상담신청</a>
+          <img class="thumb" src="images/cars/7series.png" alt="BMW 7시리즈">
+          <div class="deal">
+            <h3 class="deal-title">BMW 7시리즈</h3>
+            <p class="deal-sub">740i M Sport Package (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>153,000,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">1,015,000원</span><span class="highlight">1,013,400원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
+        </div>
+        <div class="card vehicle reveal">
+          <img class="thumb" src="images/cars/XC60.png" alt="볼보 XC60">
+          <div class="deal">
+            <h3 class="deal-title">볼보 XC60</h3>
+            <p class="deal-sub">B5 AWD Plus (A/T)</p>
+            <div class="deal-price">
+              <div><span class="label">차량가</span><b>77,700,000원</b></div>
+              <div><span class="label">월납입</span><span class="prev">602,000원</span><span class="highlight">600,300원</span></div>
+            </div>
+            <div class="deal-meta">
+              <span class="chip">48개월</span>
+              <span class="chip">선납금30%</span>
+            </div>
+            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+          </div>
         </div>
       </div>
     </div>
@@ -793,7 +1136,7 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
             <span>(필수) 개인정보 제3자 제공 동의 <a href="terms/privacyPolicy.html" class="view" target="_blank" rel="noopener">[보기]</a></span>
           </label>
         </div>
-        <button class="btn primary span-2" type="submit">최저가 견적 신청하기</button>
+        <button class="btn primary span-2" type="submit">나의 특가 견적 신청하기</button>
       </div>
     </form>
   </div>
@@ -803,12 +1146,19 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 
 <!-- Footer -->
 <footer>
-  <div class="container row">
-    <div class="small">© <span id="year"></span> 패밀리오토플랜 · All rights reserved.</div>
-    <div class="small">사업자등록번호 · 주소 · 대표 1600-0000 ·
-      <a href="#" id="open-terms">이용약관</a> ·
-      <a href="terms/privacyPolicy.html" target="_blank" rel="noopener" id="open-privacy">개인정보처리방침</a> ·
-      <a href="#" id="open-email">이메일무단수집거부</a>
+  <div class="container small" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between">
+    <div>
+      <b>패밀리오토플랜</b><br>
+      대표자: 최지윤<br>
+      주소: 인천광역시 남동구 구월동 1491-1, 2층<br>
+      이메일: <a href="mailto:chlwldbs3232@naver.com">chlwldbs3232@naver.com</a><br>
+      영업시간: 24시간
+    </div>
+    <div>
+      호스팅 제공: GitHub Pages<br>
+      <a href="terms/terms.html">이용약관</a> ·
+      <a href="terms/privacyPolicy.html" target="_blank" rel="noopener">개인정보처리방침</a><br>
+      © 2024 패밀리오토플랜. All rights reserved.
     </div>
   </div>
 </footer>
@@ -857,11 +1207,8 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 <div class="help-cta" id="helpCta" role="region" aria-label="빠른 상담 바로가기">
   <div class="panel">
     <div class="msg">궁금하신가요? 지금 바로 상담 도와드릴게요.</div>
-    <a class="btn-lg btn-phone" href="tel:16000000" aria-label="전화상담 연결 (전화)">
-      <span class="icon">📞</span><span>전화상담 1600-0000</span>
-    </a>
-    <a class="btn-lg btn-kakao" href="#contact" aria-label="카카오톡 또는 문자 상담">
-      <span class="icon">💬</span><span>카카오톡/문자 상담</span>
+    <a class="btn-lg btn-kakao" href="#contact" aria-label="상담 문의 섹션으로 이동">
+      <span class="icon">💬</span><span>상담 접수</span>
     </a>
   </div>
 </div>
