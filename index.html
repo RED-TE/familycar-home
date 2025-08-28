@@ -5,11 +5,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <base href="./">
 <title>패밀리오토플랜 | 장기렌트·리스 특가 견적</title>
+<link rel="canonical" href="https://familycar.kro.kr/">
 <meta name="description" content="장기렌트·리스 비교, 한 눈에. 투명 견적·빠른 출고·맞춤 조건으로 최적의 선택을 제안합니다." />
 <meta name="theme-color" content="#16a34a" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="icon" href="favicon.ico" />
+<meta property="og:title" content="패밀리오토플랜 | 장기렌트·리스 특가 견적" />
+<meta property="og:description" content="장기렌트·리스 비교, 투명 견적·빠른 출고·맞춤 조건으로 최적의 선택을 제안합니다." />
+<meta property="og:image" content="images/og-image.png" />
+<meta property="og:type" content="website" />
+<meta name="twitter:card" content="summary_large_image" />
+<!-- Organization & Website structured data for trust -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "패밀리오토플랜",
+  "url": "https://familycar.kro.kr",
+  "logo": "https://familycar.kro.kr/images/logo/logo_1.png",
+  "sameAs": ["https://www.facebook.com/your","https://www.instagram.com/your"],
+  "contactPoint": [{
+    "@type": "ContactPoint",
+    "telephone": "+82-2-000-0000",
+    "contactType": "customer service",
+    "areaServed": "KR",
+    "availableLanguage": ["Korean","English"]
+  }]
+}
+</script>
 
 <style>
 /* =========================
@@ -61,6 +86,7 @@ header.scrolled .nav{padding:8px 0}
   .menu{display:none}
   .burger{display:inline-flex}
   .drawer{display:none;position:absolute;left:0;right:0;top:100%;background:#fff;border-bottom:1px solid var(--line)}
+  .drawer.open{display:block !important;}
   .drawer a{display:block;padding:1rem 1.2rem;border-top:1px solid var(--line);color:var(--muted)}
   .drawer a:hover{color:#000}
 }
@@ -202,6 +228,12 @@ header.scrolled .nav{padding:8px 0}
 .pill.is-active{background:var(--brand);color:#fff;border-color:transparent}
 .card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow-sm);transition:transform .18s ease, box-shadow .18s ease}
 .card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+/* ===== Numbered pager for vehicle grid ===== */
+.pager{display:flex;justify-content:center;gap:8px;margin:16px 0 4px}
+.pager button{min-width:36px;height:36px;padding:0 10px;border-radius:8px;border:1px solid #e5e7eb;background:#fff;color:#0f172a;font-weight:800;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06);transition:transform .12s ease, box-shadow .12s ease}
+.pager button:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.pager button[aria-current="page"]{background:#0f172a;color:#fff;border-color:#0f172a}
+.pager .arrow{min-width:36px}
 .vehicle{display:flex;flex-direction:column;gap:.6rem}
 .vehicle img{border-radius:12px;border:1px solid var(--line);background:#fff;padding:10px;width:100%;aspect-ratio:16/9;height:220px;object-fit:contain}
 .vehicle .row{display:flex;justify-content:space-between;align-items:center}
@@ -442,8 +474,87 @@ footer .row{display:flex; justify-content:space-between; gap:12px; flex-wrap:wra
 .reveal{opacity:0;transform:translateY(12px);transition:opacity .55s ease, transform .55s ease}
 .reveal.show{opacity:1;transform:translateY(0)}
 .section h2{position:relative;padding-bottom:6px}
-.section h2::after{content:"";display:block;width:56px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--brand),#34d399);margin-top:10px}
+  .section h2::after{
+    content:"";
+    display:block;
+    width:56px;
+    height:4px;
+    border-radius:2px;
+    background:linear-gradient(90deg,var(--brand),#34d399);
+    margin-top:10px;
+  }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== Split section cards for clearer grouping ===== */
+.section-card{
+  position:relative;
+  background:#ffffff;
+  border:1px solid var(--line);
+  border-radius:16px;
+  box-shadow:var(--shadow-sm);
+  padding:16px;
+}
+.section-card + .section-card{margin-top:12px}
+.section-card__head{
+  display:flex;gap:8px;justify-content:space-between;align-items:center;
+  padding:10px 12px; margin:-16px -16px 12px; border-bottom:1px solid #eef2f7;
+  border-radius:16px 16px 0 0;
+  background:linear-gradient(180deg,#fbfbfd,#ffffff);
+}
+.section-card__body{padding:4px 0}
+/* keep filters and pager neatly inside */
+.section-card .filters{margin:0 0 10px}
+.section-card .pager{margin:14px 0 0}
+/* thin section separators between big sections */
+.section-divider{height:14px}
+
+/* Make popular/import blocks more separated on tinted backgrounds */
+#popular, #import{padding-top:64px; padding-bottom:64px}
+/* ===== Mobile polish (extra) ===== */
+/* Anchor offset so header doesn't cover titles on mobile */
+section[id]{scroll-margin-top:84px}
+@media (max-width:680px){
+  section[id]{scroll-margin-top:96px}
+}
+
+/* Make quick form breathe better and avoid crowding on small screens */
+@media (max-width:540px){
+  .hero{padding:56px 0 14px}
+  .hero .wrap{gap:22px}
+  .quick .container{padding:12px;border-width:1.5px}
+  .quick .title{left:14px; top:-10px; font-size:12px; padding:.28rem .6rem}
+  .quick form{grid-template-columns:1fr 1fr; gap:.55rem}
+  .quick input,.quick select{padding:.78rem .85rem; font-size:14px; border-radius:10px}
+  .quick button{padding:.85rem 1rem; border-radius:10px}
+  .consents{padding:.28rem .5rem}
+  .consents .consent{font-size:11.5px}
+  .consents input[type="checkbox"]{width:10px;height:10px;border-radius:3px}
+}
+
+/* Ultra-narrow phones */
+@media (max-width:390px){
+  .quick form{grid-template-columns:1fr; gap:.5rem}
+  .btn, .vehicle .actions .btn{padding:.9rem 1rem}
+  .deal-price{font-size:14px}
+  .deal-title{font-size:18px}
+  .price-pill .num{font-size:20px}
+}
+
+/* Vehicle card image fit & spacing on mobile for consistent height */
+@media (max-width:680px){
+  .vehicle{gap:.75rem}
+  .vehicle .thumb{padding:8px; aspect-ratio:16/10}
+  .deal-price{margin-top:4px; padding-top:6px}
+  .deal-meta{gap:.35rem}
+}
+
+/* Footer readability on small screens */
+@media (max-width:540px){
+  footer{padding:26px 0}
+  footer .row{gap:8px}
+  footer .small{font-size:12px; line-height:1.8}
+}
+
 /* ===== 기존 코드 =====
 .form-card { padding:22px 22px 24px; }
 .consents input[type="checkbox"]{ width:12px; height:12px; }
@@ -553,6 +664,15 @@ footer{line-height:1.9}
     </div>
     <button class="burger" aria-label="메뉴 열기" id="burger"><span></span></button>
   </nav>
+  <div class="drawer" id="drawer">
+    <a href="index.html#popular">인기차종</a>
+    <a href="index.html#import">수입 리스</a>
+    <a href="index.html#rent-vs-lease">렌트 vs 리스</a>
+    <a href="index.html#process">절차</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="events.html">이벤트</a>
+    <a href="index.html#contact" class="cta">견적문의</a>
+  </div>
 </header>
 
 <!-- Hero -->
@@ -581,16 +701,15 @@ footer{line-height:1.9}
   <!-- 전면 클릭 레이어 -->
   <a href="events/promo1.html" aria-label="프로모션 1 상세 페이지로 이동"
      style="position:absolute; inset:0; z-index:3; display:block"></a>
-  <img class="bg" src="images/header-promo/promotion-1.png" alt="프로모션 1" loading="lazy" decoding="async" data-fallback="images/헤더 프로모션/promotion-1.png" />
+  <img class="bg" src="images/header-promo/promotion-1.png" alt="프로모션 1" loading="lazy" decoding="async" fetchpriority="high" data-fallback="images/헤더 프로모션/promotion-1.png" />
 </article>
             <article class="slide" aria-roledescription="slide" id="promo-2">
               <img class="bg" src="images/header-promo/promotion-2.png" alt="프로모션 2" loading="lazy" decoding="async" data-fallback="images/헤더 프로모션/promotion-2.png" />
             </article>
             <article class="slide" aria-roledescription="slide" id="promo-3">
               <img class="bg" src="images/header-promo/promotion-3.png" alt="프로모션 3" loading="lazy" decoding="async" data-fallback="images/헤더 프로모션/promotion-3.png" />
-            </article
-               
-            <article class="slide" aria-roledescription="slide" id="promo-5">
+            </article>
+            <article class="slide" aria-roledescription="slide" id="promo-4">
               <img class="bg" src="images/header-promo/promotion-5.png" alt="프로모션 5" loading="lazy" decoding="async" data-fallback="images/헤더 프로모션/promotion-5.png" />
             </article>
           </div>
@@ -603,7 +722,6 @@ footer{line-height:1.9}
             <button role="tab" aria-controls="promo-2" aria-selected="false"></button>
             <button role="tab" aria-controls="promo-3" aria-selected="false"></button>
             <button role="tab" aria-controls="promo-4" aria-selected="false"></button>
-            <button role="tab" aria-controls="promo-5" aria-selected="false"></button>
           </div>
         </div>
       </div>
@@ -683,29 +801,32 @@ footer{line-height:1.9}
   </div>
 </div>
 
-<!-- 인기차종 + 필터 -->
+<!-- 베스트 인기차종: 국산 렌트 차량 20종 추가 -->
 <section class="section container" id="popular">
   <h2>BEST 인기차종 특가</h2>
-  <p class="lead">월 납입금은 선납/보증금/프로모션에 따라 변동될 수 있습니다.</p>
-
-  <div class="filters" role="tablist" aria-label="차량 필터">
-    <button class="pill" data-filter="domestic" role="tab">국산</button>
-    <button class="pill" data-filter="import" role="tab">수입</button>
-    <button class="pill" data-filter="suv" role="tab">SUV</button>
-    <button class="pill" data-filter="sedan" role="tab">세단</button>
-    <button class="pill" data-filter="ev" role="tab">전기</button>
+  <p class="lead">국산 렌트 BEST 모델을 만나보세요.</p>
+<div class="section-card">
+  <div class="section-card__head">
+    <div>브랜드별 보기</div>
   </div>
+  <div class="section-card__body">
+<div class="filters" role="tablist" aria-label="브랜드 필터">
+  <button class="pill is-active" data-filter="all">전체</button>
+  <button class="pill" data-filter="brand-현대">현대</button>
+  <button class="pill" data-filter="brand-기아">기아</button>
+  <button class="pill" data-filter="brand-제네시스">제네시스</button>
+</div>
 
-  <div class="grid cols-3" id="vehicleGrid">
-    <!-- 국산 SUV -->
-    <div class="card vehicle reveal" data-tags="domestic suv">
+    <div class="grid cols-3" id="vehicleGrid">
+      <!-- 국산 SUV -->
+      <div class="card vehicle reveal" data-tags="domestic suv">
       <img class="thumb" src="images/cars/sorento.png" alt="기아 쏘렌토">
       <div class="deal">
         <h3 class="deal-title">쏘렌토</h3>
         <p class="deal-sub">가솔린 터보 1.6 하이브리드 2WD 프레스티지 (5인승) (A/T)</p>
         <div class="deal-price">
-          <div><span class="label">차량가</span><b>40,280,000원</b></div>
-          <div><span class="label">월납입</span><span class="prev">308,025원</span><span class="highlight">285,420원</span></div>
+          <div><span class="label">차량가</span><b>36,350,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">282,443원</span></div>
         </div>
         <div class="deal-meta">
           <span class="chip">48개월</span>
@@ -720,8 +841,8 @@ footer{line-height:1.9}
         <h3 class="deal-title">싼타페</h3>
         <p class="deal-sub">가솔린 터보 1.6 하이브리드 2WD 익스클루시브 (5인승)</p>
         <div class="deal-price">
-          <div><span class="label">차량가</span><b>40,310,000원</b></div>
-          <div><span class="label">월납입</span><span class="prev">315,557원</span><span class="highlight">278,623원</span></div>
+          <div><span class="label">차량가</span><b>36,620,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">288,565원</span></div>
         </div>
         <div class="deal-meta">
           <span class="chip">48개월</span>
@@ -736,8 +857,8 @@ footer{line-height:1.9}
         <h3 class="deal-title">카니발</h3>
         <p class="deal-sub">가솔린 2.5 터보 7인승 시그니처 (A/T)</p>
         <div class="deal-price">
-          <div><span class="label">차량가</span><b>38,420,000원</b></div>
-          <div><span class="label">월납입</span><span class="prev">376,871원</span><span class="highlight">356,020원</span></div>
+          <div><span class="label">차량가</span><b>36,360,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">321,750원</span></div>
         </div>
         <div class="deal-meta">
           <span class="chip">48개월</span>
@@ -813,116 +934,292 @@ footer{line-height:1.9}
       </div>
     </div>
 
+    <!-- ✅ 기아 K8 (국산 세단) -->
+    <div class="card vehicle reveal" data-tags="domestic sedan">
+      <img class="thumb" src="images/cars/K8.png" alt="기아 K8">
+      <div class="deal">
+        <h3 class="deal-title">K8</h3>
+        <p class="deal-sub">가솔린 2.5 2WD 노블레스 라이트 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>37,360,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">339,340원</span></div>
+        </div>
+        <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
+    </div>
+
+    <!-- ✅ 현대 팰리세이드 (국산 SUV) -->
+    <div class="card vehicle reveal" data-tags="domestic suv">
+      <img class="thumb" src="images/cars/Palisade.png" alt="현대 팰리세이드">
+      <div class="deal">
+        <h3 class="deal-title">팰리세이드</h3>
+        <p class="deal-sub">가솔린 2.5 터보 2WD 9인승 익스클루시브 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>43,830,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">358,063원</span></div>
+        </div>
+        <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
+    </div>
+
+    <!-- ✅ 기아 K5 (국산 세단) -->
+    <div class="card vehicle reveal" data-tags="domestic sedan">
+      <img class="thumb" src="images/cars/K5.png" alt="기아 K5">
+      <div class="deal">
+        <h3 class="deal-title">K5</h3>
+        <p class="deal-sub">가솔린 2.0 2WD 스마트 셀렉션 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>27,660,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">254,035원</span></div>
+        </div>
+        <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
+    </div>
+
+    <!-- ✅ 기아 스포티지 (국산 SUV) -->
+    <div class="card vehicle reveal" data-tags="domestic suv">
+      <img class="thumb" src="images/cars/Sportage.png" alt="기아 스포티지">
+      <div class="deal">
+        <h3 class="deal-title">스포티지</h3>
+        <p class="deal-sub">가솔린 1.6 터보 2WD 프레스티지 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>28,360,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">237,340원</span></div>
+        </div>
+        <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
+    </div>
+
+    <!-- ✅ 기아 셀토스 (국산 SUV) -->
+    <div class="card vehicle reveal" data-tags="domestic suv">
+      <img class="thumb" src="images/cars/Seltos.png" alt="기아 셀토스">
+      <div class="deal">
+        <h3 class="deal-title">셀토스</h3>
+        <p class="deal-sub">가솔린 1.6 터보 2WD 트렌디 (A/T)</p>
+        <div class="deal-price">
+          <div><span class="label">차량가</span><b>23,010,000원</b></div>
+          <div><span class="label">월납입</span><span class="highlight">215,888원</span></div>
+        </div>
+        <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+        <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+      </div>
+    </div>
+
+
   </div>
+</div>
+  <div class="pager" id="vehiclePager"></div>
+  </div>
+</div>
 </section>
 
-<!-- 수입 인기차종 (리스) / 틴트 -->
-<section class="section section--tint" id="import">
   <div class="container">
     <h2>수입 인기차종 (리스)</h2>
     <p class="lead">국내 베스트셀링 수입차 상위 모델을 특가 리스로 만나보세요.</p>
-    <div class="carousel-wrap">
-      <button class="carousel-btn prev" aria-label="이전">&larr;</button>
-      <button class="carousel-btn next" aria-label="다음">&rarr;</button>
-      <div class="carousel" id="importCarousel">
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/eclass.png" alt="벤츠 E-클래스">
-          <div class="deal">
-            <h3 class="deal-title">벤츠 E-클래스</h3>
-            <p class="deal-sub">E 300 Exclusive (가솔린) (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>91,500,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">705,000원</span><span class="highlight">703,900원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+<div class="section-card">
+  <div class="section-card__head">
+    <div>브랜드별 보기</div>
+  </div>
+  <div class="section-card__body">
+   <div class="filters" role="tablist" aria-label="브랜드 필터">
+  <button class="pill is-active" data-filter="all">전체</button>
+  <button class="pill" data-filter="brand-BMW">BMW</button>
+  <button class="pill" data-filter="brand-벤츠">벤츠</button>
+  <button class="pill" data-filter="brand-아우디">아우디</button>
+  <button class="pill" data-filter="brand-볼보">볼보</button>
+</div>
+
+    <div class="grid cols-3" id="importGrid">
+      <!-- ✅ 벤츠 GLC 300 Avantgarde 4Matic -->
+      <div class="card vehicle reveal" data-tags="import suv">
+        <img class="thumb" src="images/cars/glc.png" alt="벤츠 GLC 300 Avantgarde 4Matic">
+        <div class="deal">
+          <h3 class="deal-title">벤츠 GLC 300 Avantgarde</h3>
+          <p class="deal-sub">가솔린 2.0 4WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>80,500,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">528,900원</span></div>
           </div>
-        </div>
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/5series.png" alt="BMW 5시리즈">
-          <div class="deal">
-            <h3 class="deal-title">BMW 5시리즈</h3>
-            <p class="deal-sub">530i M Sport Package (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>76,500,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">685,000원</span><span class="highlight">683,300원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
-          </div>
-        </div>
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/glc.png" alt="벤츠 GLC">
-          <div class="deal">
-            <h3 class="deal-title">벤츠 GLC</h3>
-            <p class="deal-sub">GLC 300 4MATIC (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>76,900,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">629,000원</span><span class="highlight">627,400원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
-          </div>
-        </div>
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/sclass.png" alt="벤츠 S-클래스">
-          <div class="deal">
-            <h3 class="deal-title">벤츠 S-클래스</h3>
-            <p class="deal-sub">S 500 4MATIC (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>162,300,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">1,095,000원</span><span class="highlight">1,093,200원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
-          </div>
-        </div>
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/7series.png" alt="BMW 7시리즈">
-          <div class="deal">
-            <h3 class="deal-title">BMW 7시리즈</h3>
-            <p class="deal-sub">740i M Sport Package (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>153,000,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">1,015,000원</span><span class="highlight">1,013,400원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
-          </div>
-        </div>
-        <div class="card vehicle reveal">
-          <img class="thumb" src="images/cars/XC60.png" alt="볼보 XC60">
-          <div class="deal">
-            <h3 class="deal-title">볼보 XC60</h3>
-            <p class="deal-sub">B5 AWD Plus (A/T)</p>
-            <div class="deal-price">
-              <div><span class="label">차량가</span><b>77,700,000원</b></div>
-              <div><span class="label">월납입</span><span class="prev">602,000원</span><span class="highlight">600,300원</span></div>
-            </div>
-            <div class="deal-meta">
-              <span class="chip">48개월</span>
-              <span class="chip">선납금30%</span>
-            </div>
-            <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
-          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
         </div>
       </div>
+
+      <!-- ✅ 아우디 Q6 e-tron Performance -->
+      <div class="card vehicle reveal" data-tags="import ev suv">
+        <img class="thumb" src="images/cars/Q6 e-tron_Performance.png" alt="아우디 Q6 e-tron Performance">
+        <div class="deal">
+          <h3 class="deal-title">아우디 Q6 e-tron</h3>
+          <p class="deal-sub"> Performance (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>82,900,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">579,900원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ 아우디 Q4 e-tron 45 -->
+      <div class="card vehicle reveal" data-tags="import ev suv">
+        <img class="thumb" src="images/cars/Q4 e-tron_45.png" alt="아우디 Q4 e-tron 45">
+        <div class="deal">
+          <h3 class="deal-title">아우디 Q4 e-tron 45</h3>
+          <p class="deal-sub">전기 2WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>64,300,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">400,600원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW 740i xDrive M Sport -->
+      <div class="card vehicle reveal" data-tags="import sedan">
+        <img class="thumb" src="images/cars/7series.png" alt="BMW 740i xDrive M Sport">
+        <div class="deal">
+          <h3 class="deal-title">BMW 740i xDrive M Sport</h3>
+          <p class="deal-sub">가솔린 3.0 AWD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>176,000,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">1,345,200원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW 520i M Sport -->
+      <div class="card vehicle reveal" data-tags="import sedan">
+        <img class="thumb" src="images/cars/5series.png" alt="BMW 520i M Sport">
+        <div class="deal">
+          <h3 class="deal-title">BMW 520i M Sport</h3>
+          <p class="deal-sub">가솔린 2.0 2WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>74,300,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">418,400원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW 320i M Sport -->
+      <div class="card vehicle reveal" data-tags="import sedan">
+        <img class="thumb" src="images/cars/BMW_3_Series.png" alt="BMW 320i M Sport">
+        <div class="deal">
+          <h3 class="deal-title">BMW 320i M Sport</h3>
+          <p class="deal-sub">가솔린 2.0 2WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>62,100,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">366,800원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ 메르세데스-마이바흐 S580 4Matic L -->
+      <div class="card vehicle reveal" data-tags="import sedan luxury">
+        <img class="thumb" src="images/cars/sclass.png" alt="메르세데스-마이바흐 S580 4Matic L">
+        <div class="deal">
+          <h3 class="deal-title">메르세데스-마이바흐 S580</h3>
+          <p class="deal-sub">가솔린 4.0 4WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>309,600,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">2,456,700원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ 벤츠 S450 4Matic L -->
+      <div class="card vehicle reveal" data-tags="import sedan">
+        <img class="thumb" src="images/cars/sclass.png" alt="벤츠 S450 4Matic L">
+        <div class="deal">
+          <h3 class="deal-title">벤츠 S450 4Matic L</h3>
+          <p class="deal-sub">가솔린 3.0 4WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>187,600,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">1,175,600원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ 볼보 XC60 B5 Ultra -->
+      <div class="card vehicle reveal" data-tags="import suv">
+        <img class="thumb" src="images/cars/XC60.png" alt="볼보 XC60 B5 Ultra">
+        <div class="deal">
+          <h3 class="deal-title">볼보 XC60 B5 Ultra</h3>
+          <p class="deal-sub">가솔린 2.0 터보 AWD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>73,300,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">565,000원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW X3 20i xDrive -->
+      <div class="card vehicle reveal" data-tags="import suv">
+        <img class="thumb" src="images/cars/BMW_X3_20 xDrive.png" alt="BMW X3 20i xDrive">
+        <div class="deal">
+          <h3 class="deal-title">BMW X3 20i xDrive</h3>
+          <p class="deal-sub">가솔린 2.0 4WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>68,500,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">403,200원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW X7 40i xDrive DPE 7seater -->
+      <div class="card vehicle reveal" data-tags="import suv">
+        <img class="thumb" src="images/cars/BMW_X7_xDrive40i DPE.png" alt="BMW X7 40i xDrive DPE 7seater">
+        <div class="deal">
+          <h3 class="deal-title">BMW X7 40i xDrive</h3>
+          <p class="deal-sub">가솔린 3.0 4WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>152,300,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">909,900원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- ✅ BMW Z4 20i sDrive M Sport -->
+      <div class="card vehicle reveal" data-tags="import coupe">
+        <img class="thumb" src="images/cars/Z4.png" alt="BMW Z4 20i sDrive M Sport" data-fallback="images/cars/bmw_z4_20i_msport.png">
+        <div class="deal">
+          <h3 class="deal-title">BMW Z4 20i</h3>
+          <p class="deal-sub">M Sport가솔린 2.0 2WD (A/T)</p>
+          <div class="deal-price">
+            <div><span class="label">차량가</span><b>76,600,000원</b></div>
+            <div><span class="label">월납입</span><span class="highlight">597,800원</span></div>
+          </div>
+          <div class="deal-meta"><span class="chip">48개월</span><span class="chip">선납금30%</span></div>
+          <div class="actions"><a class="btn" href="#contact">오늘의 특가 확인</a></div>
+        </div>
+      </div>
+
+      <!-- 나머지 요청 모델(렉서스 300h, X4, CLE200 등)은 이미지/금액 확보 후 이어서 추가 가능 -->
     </div>
+
+    <div class="pager" id="importPager"></div>
+  </div>
+</div>
   </div>
 </section>
 
@@ -1130,6 +1427,7 @@ footer{line-height:1.9}
 
 
 
+<div class="section-divider" aria-hidden="true"></div>
 <!-- Footer -->
 <footer>
   <div class="container small" style="display:flex;gap:16px;flex-wrap:wrap;justify-content:space-between">
@@ -1201,6 +1499,25 @@ footer{line-height:1.9}
 <button class="to-top" id="toTop" aria-label="맨 위로">↑</button>
 
 <script>
+// Vehicle image loader: try data-fallback once, then gracefully show a placeholder
+document.querySelectorAll('.vehicle img.thumb').forEach(img => {
+  img.addEventListener('error', () => {
+    // Try one fallback src exactly once
+    if (!img.dataset.fallbackTried && img.dataset.fallback) {
+      img.dataset.fallbackTried = '1';
+      img.src = img.dataset.fallback;
+      return; // wait for next load/error
+    }
+    // Final graceful placeholder so the card keeps its layout
+    img.style.background = '#f8fafc';
+    img.style.border = '1px dashed #e5e7eb';
+    img.style.objectFit = 'contain';
+    img.alt = (img.alt || '차량 이미지') + ' (이미지 준비중)';
+  }, { once:false });
+});
+</script>
+
+<script>
 /* ====== HELP CTA: hide when contact section is visible ====== */
 document.addEventListener('DOMContentLoaded',()=>{ document.querySelectorAll('input[name="_ts"]').forEach(i=>i.value=Date.now()); });
 const helpCta=document.getElementById('helpCta');
@@ -1212,6 +1529,16 @@ if(helpCta){
     });
   },{threshold:.2});
   if(contact) ioHelp.observe(contact);
+  // Also hide when the sticky quick bar is on screen (to avoid overlap on small phones)
+  const quickBar = document.querySelector('.quick');
+  if(quickBar){
+    const ioQuick = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ helpCta.classList.add('hidden'); }
+      });
+    },{threshold:.15});
+    ioQuick.observe(quickBar);
+  }
 }
 
 /* ====== PROGRESS BAR & SCROLLSPY ====== */
@@ -1226,7 +1553,12 @@ window.addEventListener('scroll',spy,{passive:true});spy();
 /* ====== MOBILE MENU ====== */
 const burger=document.getElementById('burger');
 const drawer=document.getElementById('drawer');
-burger?.addEventListener('click',()=>{if(!drawer)return;const open=drawer.style.display==='block';drawer.style.display=open?'none':'block';drawer.setAttribute('aria-hidden',open?'true':'false');});
+burger?.addEventListener('click', ()=>{
+  if(!drawer) return;
+  drawer.classList.toggle('open');
+  const isOpen = drawer.classList.contains('open');
+  drawer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+});
 
 /* ====== REVEAL ====== */
 (function(){const targets=document.querySelectorAll('.reveal, .section h2');targets.forEach(el=>el.classList.add('reveal'));const io=new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('show');io.unobserve(e.target);}});},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});targets.forEach(el=>io.observe(el));})();
@@ -1323,9 +1655,118 @@ document.querySelectorAll('.carousel-wrap').forEach(wrap=>{
   start();
 });
 
-/* ====== FILTER TABS ====== */
-const grid=document.getElementById('vehicleGrid');
-document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{document.querySelectorAll('.pill').forEach(x=>x.classList.remove('is-active'));p.classList.add('is-active');const tag=p.dataset.filter;grid.querySelectorAll('.card').forEach(card=>{const tags=card.dataset.tags||'';const show=tag==='all'||tags.includes(tag);card.style.display=show?'flex':'none';});}));
+/* ====== FILTER TABS + PAGINATION (6 per page) ====== */
+(function(){
+  function setupPagedGrid(sectionId, gridId, pagerId, opts={}){
+    const grid = document.getElementById(gridId);
+    const pager = document.getElementById(pagerId);
+    if(!grid || !pager) return;
+
+    const { autoplay=false, interval=6000 } = opts;
+
+    // Scope: prefer an explicit section, else the nearest .container, else document
+    const section = document.getElementById(sectionId);
+    const scope = section || grid.closest('.container') || document;
+
+    const all = [...grid.querySelectorAll('.card.vehicle')];
+    let tag = 'all';
+    let page = 1;
+    const pageSize = 6;
+
+    // Preserve viewport scroll position while we rerender (prevents jumping)
+    function keepScroll(fn){
+      const x = window.scrollX || window.pageXOffset;
+      const y = window.scrollY || window.pageYOffset;
+      try { fn(); } finally { window.scrollTo(x, y); }
+    }
+
+    function filtered(){
+      if(tag==='all') return all;
+      return all.filter(card => (card.dataset.tags||'').includes(tag));
+    }
+
+    function render(){
+      const items = filtered();
+      const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+      if(page > totalPages) page = totalPages;
+
+      // Hide all, then show current page
+      all.forEach(el => el.style.display = 'none');
+      const start = (page-1)*pageSize;
+      const current = items.slice(start, start+pageSize);
+      current.forEach(el => el.style.display = 'flex');
+
+      // Build pager  ‹ 1 2 3 ›
+      pager.innerHTML = '';
+      const mkBtn = (text, onClick, opts={}) => {
+        const b = document.createElement('button');
+        b.textContent = text;
+        if(opts.class) b.classList.add(opts.class);
+        if(opts.disabled) b.disabled = true;
+        if(opts.current) b.setAttribute('aria-current','page');
+
+        // Prevent the browser from auto-scrolling the viewport to the focused button
+        b.addEventListener('mousedown', e=>{ e.preventDefault(); });
+        b.addEventListener('click', (e)=>{ e.preventDefault(); b.blur(); onClick(); });
+
+        return b;
+      };
+
+      const total = Math.max(1, Math.ceil(items.length / pageSize));
+      pager.appendChild(mkBtn('‹', ()=> keepScroll(()=>{ if(page>1){ page--; render(); } else { page = total; render(); } }), {class:'arrow'}));
+      for(let i=1;i<=total;i++){
+        pager.appendChild(mkBtn(String(i), ()=> keepScroll(()=>{ page=i; render(); }), {current: i===page}));
+      }
+      pager.appendChild(mkBtn('›', ()=> keepScroll(()=>{ if(page<total){ page++; render(); } else { page = 1; render(); } }), {class:'arrow'}));
+    }
+
+    // Tab (filter) behavior — scope to this grid's area only
+    const pills = scope.querySelectorAll('.pill');
+    pills.forEach(p=>{
+      p.addEventListener('click', ()=> keepScroll(()=>{
+        // Only toggle pills within the same scope
+        pills.forEach(x=>x.classList.remove('is-active'));
+        p.classList.add('is-active');
+        tag = p.dataset.filter || 'all';
+        page = 1;
+        render();
+      }));
+    });
+
+    const active = scope.querySelector('.pill.is-active') || pills[0];
+    if(active) active.classList.add('is-active');
+    tag = active?.dataset.filter || 'all';
+    render();
+
+    // ===== Autoplay for pagination (loop) =====
+    if(autoplay){
+      let timer=null;
+      const start=()=>{ stop(); timer=setInterval(()=>keepScroll(()=>{
+        const items = filtered();
+        const total = Math.max(1, Math.ceil(items.length / pageSize));
+        page = page < total ? page+1 : 1; // loop to first
+        render();
+      }), interval); };
+      const stop =()=>{ if(timer){ clearInterval(timer); timer=null; } };
+
+      // Pause when section not visible
+      const target = section || grid;
+      const io = new IntersectionObserver((es)=>{ es.forEach(e=>{ e.isIntersecting ? start() : stop(); }); }, {threshold:.2});
+      io.observe(target);
+
+      // Pause on user interaction
+      pager.addEventListener('mouseenter', stop);
+      pager.addEventListener('mouseleave', start);
+      scope.addEventListener('keydown', stop, {capture:true});
+      scope.addEventListener('pointerdown', stop, {capture:true});
+    }
+  }
+
+  // 국내 인기 (popular) — autoplay enabled
+  setupPagedGrid('popular', 'vehicleGrid', 'vehiclePager', { autoplay:true, interval:6500 });
+  // 수입 리스 (import) — manual paging only (no autoplay)
+  setupPagedGrid('import', 'importGrid', 'importPager');
+})();
 
 /* ====== FAQ TOGGLE ====== */
 document.querySelectorAll('.faq-q').forEach(q=>{
