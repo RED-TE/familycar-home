@@ -886,48 +886,53 @@
   })();
   </script>
   <!-- Firebase (from index.html) -->
+<!-- Firebase (browser CDN imports like index.html) -->
 <script type="module" id="firebaseModule">
-import { initializeApp } from "firebase/app";
-import { getAnalytics, logEvent } from "firebase/analytics";
-import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// ===== Firebase 설정 =====
-const firebaseConfig = {
-  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-  authDomain: "familycar-home.firebaseapp.com",
-  projectId: "familycar-home",
-  storageBucket: "familycar-home.firebasestorage.app",
-  messagingSenderId: "69504878653",
-  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-  measurementId: "G-YXV83SLSD0"
-};
+  // ✅ index.html과 동일한 설정 사용
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+    authDomain: "familycar-home.firebaseapp.com",
+    projectId: "familycar-home",
+    storageBucket: "familycar-home.firebasestorage.app",
+    messagingSenderId: "69504878653",
+    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+    measurementId: "G-YXV83SLSD0"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const analytics = getAnalytics(app);
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
+  const analytics = getAnalytics(app);
 
-    // 공개 전송 함수: 폼 데이터 저장 + 이벤트 로깅
-    window.__submitInquiry = async function(payload = {}){
-      try{
-        const meta = {
-          userAgent: navigator.userAgent,
-          href: location.href,
-          utm: location.search || '',
-        };
-        await addDoc(collection(db, 'inquiries'), {
-          ...payload,
-          createdAt: serverTimestamp(),
-          meta
-        });
-        logEvent(analytics, 'lead_submit', { source: 'main.html', channel: payload.channel || '' });
-        return { ok: true };
-      }catch(err){
-        console.error('submitInquiry error', err);
-        logEvent(analytics, 'lead_submit_error', { message: String(err && err.message || err) });
-        return { ok:false, error: String(err && err.message || err) };
-      }
+  // 공개 전송 함수: 폼 데이터 저장 + 이벤트 로깅
+  window.__submitInquiry = async function(payload = {}){
+    try{
+      const meta = {
+        userAgent: navigator.userAgent,
+        href: location.href,
+        utm: location.search || '',
+      };
+
+      // ❌ .payload 오타 제거, ✅ 전개 연산자로 바꿔서 병합
+      await addDoc(collection(db, 'inquiries'), {
+        ...payload,
+        createdAt: serverTimestamp(),
+        meta
+      });
+
+      logEvent(analytics, 'lead_submit', { source: 'main.html', channel: payload.channel || '' });
+      return { ok: true };
+    }catch(err){
+      console.error('submitInquiry error', err);
+      logEvent(analytics, 'lead_submit_error', { message: String(err && err.message || err) });
+      return { ok:false, error: String(err && err.message || err) };
     }
-  </script>
+  }
+</script>
 <script>
 (function(){
   // ---------- 이미지 매칭 로더 (강화판) ----------
