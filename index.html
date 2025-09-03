@@ -894,16 +894,16 @@
   import { getAnalytics, logEvent }
     from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"; <!-- ✅ 추가 -->
 
-  // ✅ Firebase 프로젝트 설정 ...
-   const firebaseConfig = {
-    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-    authDomain: "familycar-home.firebaseapp.com",
-    projectId: "familycar-home",
-    storageBucket: "familycar-home.firebasestorage.app",
-    messagingSenderId: "69504878653",
-    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-    measurementId: "G-YXV83SLSD0"
-  };
+// ===== Firebase 설정 =====
+const firebaseConfig = {
+  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+  authDomain: "familycar-home.firebaseapp.com",
+  projectId: "familycar-home",
+  storageBucket: "familycar-home.firebasestorage.app",
+  messagingSenderId: "69504878653",
+  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+  measurementId: "G-YXV83SLSD0"
+};
 
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
@@ -1004,6 +1004,30 @@
     return Array.from(bases);
   }
 
+  // 케이스(대/소문자) 변형: 마지막 파일명 구간만 다양한 케이스로 시도
+  function withSegmentCaseVariants(p){
+    const out = new Set();
+    const parts = p.split('/');
+    const last = parts.pop() || '';
+    const stem = last.replace(/\.[A-Za-z0-9]+$/, ''); // 확장자 제거
+
+    const segs = new Set([
+      stem,
+      stem.toLowerCase(),
+      stem.toUpperCase(),
+      stem.charAt(0).toUpperCase() + stem.slice(1).toLowerCase(), // TitleCase
+    ]);
+
+    // 원래 확장자가 있으면 그대로, 없으면 확장자 없이 반환 (확장자는 expand 단계에서 붙임)
+    const hadExt = /\.[A-Za-z0-9]+$/.test(last);
+    segs.forEach(s => {
+      const candidate = parts.concat(hadExt ? s + last.match(/\.[A-Za-z0-9]+$/)[0] : s).join('/');
+      out.add(candidate);
+    });
+
+    return Array.from(out);
+  }
+
   // 4) 타이틀 → 후보 경로 생성
   function titleToBases(title){
     const out = new Set();
@@ -1038,14 +1062,14 @@
 
   // 5) 확장자/경로 조합 생성
   function expandWithExtAndPaths(base){
-    const withPaths = EXTRA_BASE_PATHS(base);
+    const withPaths = EXTRA_BASE_PATHS(base).flatMap(withSegmentCaseVariants);
     const out = new Set();
-    withPaths.forEach(p=>{
-      if(/\.[A-Za-z0-9]+$/.test(p)){
-        const stem = p.replace(/\.[A-Za-z0-9]+$/,'');
-        EXTS.forEach(ext=>out.add(stem+ext));
-      }else{
-        EXTS.forEach(ext=>out.add(p+ext));
+    withPaths.forEach(p => {
+      if (/\.[A-Za-z0-9]+$/.test(p)) {
+        const stem = p.replace(/\.[A-Za-z0-9]+$/, '');
+        EXTS.forEach(ext => out.add(stem + ext));
+      } else {
+        EXTS.forEach(ext => out.add(p + ext));
       }
     });
     return Array.from(out);
