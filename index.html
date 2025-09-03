@@ -734,9 +734,17 @@
 
 
 
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed left-1/2 -translate-x-1/2 bottom-6 z-50 rounded-xl bg-neutral-900 text-white px-4 py-3 text-sm shadow-lg">접수 완료! 곧 상담원이 연락드릴게요.</div>
-
+ <!-- submit 핸들러 내부만 교체 -->
+const res = await window.__submitInquiry?.(payload).catch(()=>({ok:false}));
+if(res && res.ok){
+  const toast = document.getElementById('toast');
+  toast.textContent = '접수 완료! 곧 상담원이 연락드릴게요.';
+  toast.classList.remove('hidden');
+  setTimeout(()=>toast.classList.add('hidden'), 2500);
+  e.target.reset();
+} else {
+  alert('저장이 실패했어요. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.');
+}
   <!-- Minimal JS: UTM capture, smooth scroll, fake submit -->
   <script>
   (function(){
