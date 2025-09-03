@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>패밀리오토플랜 | 장기렌트·리스 견적</title>
   <meta name="description" content="개인/법인 장기렌트·리스 맞춤 견적. 월 납입 최적화, 빠른 출고, 사후관리." />
-  <!-- Google Analytics (gtag) from index.html config -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-RT555BFG1Z"></script>
+  <!-- Google Analytics (gtag) - sync with Firebase measurementId -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YXV83SLSD0"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);} 
+    function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-RT555BFG1Z');
+    gtag('config', 'G-YXV83SLSD0');
   </script>
   <!-- TailwindCSS (CDN) -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -181,7 +181,7 @@
             </div>
             <div>
               <label class="text-xs text-neutral-500">차량</label>
-              <select name="brand" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
+              <select name="brand" required class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
                 <option value="">브랜드 선택</option>
                 <option>현대</option>
                 <option>기아</option>
@@ -242,7 +242,7 @@
               <a href="terms/privacyPolicy.html" target="_blank" rel="noopener" class="underline underline-offset-2 text-emerald-700 hover:text-emerald-800">보기</a>
             </label>
           </div>
-          <button id="submit-btn" class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 shadow">
+          <button id="submit-btn" type="submit" class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 shadow">
             무료 견적 받기
           </button>
           <p id="utm-note" class="text-[11px] text-neutral-400 mt-3">※ 입력 정보는 견적/상담 목적 외에 사용되지 않습니다.</p>
@@ -281,7 +281,7 @@
           </div>
           <div class="mt-3">
             <p class="font-bold">아버지의 드림카</p>
-            <p class="text-sm text-neutral-500 mt-1">아이오닉 5/6, EV9, EV3, EV6</p>
+            <p class="text-sm text-neutral-500 mt-1">마이바흐 S, BMW 5/3시리즈</p>
             <button class="mt-3 text-sm font-semibold text-emerald-700" onclick="scrollToQuote()">견적 받기</button>
           </div>
         </div>
@@ -312,7 +312,7 @@
           </div>
           <div class="mt-3">
             <p class="font-bold">업무/법인</p>
-            <p class="text-sm text-neutral-500 mt-1">그랜저, K8, 5/3시리즈</p>
+            <p class="text-sm text-neutral-500 mt-1">카니발 · 팰리세이드 · 마세라티/마이바흐 S클래스 · 그랜저</p>
             <button class="mt-3 text-sm font-semibold text-emerald-700" onclick="scrollToQuote()">견적 받기</button>
           </div>
         </div>
@@ -324,7 +324,7 @@
           </div>
           <div class="mt-3">
             <p class="font-bold">가성비 출퇴근</p>
-            <p class="text-sm text-neutral-500 mt-1">레이, 아반떼, K3</p>
+            <p class="text-sm text-neutral-500 mt-1">아반떼</p>
             <button class="mt-3 text-sm font-semibold text-emerald-700" onclick="scrollToQuote()">견적 받기</button>
           </div>
         </div>
