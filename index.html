@@ -182,30 +182,33 @@
             </div>
             <div>
               <label class="text-xs text-neutral-500">차량</label>
-              <select name="carType" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
-                <option>SUV</option>
-                <option>세단</option>
-                <option>전기차</option>
-                <option>경차/소형</option>
-                <option>수입</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs text-neutral-500">유종</label>
-              <select name="fuel" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
-                <option>가솔린</option>
-                <option>디젤</option>
-                <option>하이브리드</option>
-                <option>전기</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-xs text-neutral-500">월 예산</label>
-              <select name="budget" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
-                <option>30만원 이하</option>
-                <option>30~40만원</option>
-                <option>40~60만원</option>
-                <option>60만원 이상</option>
+              <select name="brand" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
+                <option value="">브랜드 선택</option>
+                <option>현대</option>
+                <option>기아</option>
+                <option>제네시스</option>
+                <option>쉐보레</option>
+                <option>르노코리아</option>
+                <option>KGM</option>
+                <option>BMW</option>
+                <option>메르세데스-벤츠</option>
+                <option>아우디</option>
+                <option>볼보</option>
+                <option>폭스바겐</option>
+                <option>토요타</option>
+                <option>렉서스</option>
+                <option>포드</option>
+                <option>미니</option>
+                <option>포르쉐</option>
+                <option>혼다</option>
+                <option>지프</option>
+                <option>랜드로버</option>
+                <option>푸조</option>
+                <option>테슬라</option>
+                <option>링컨</option>
+                <option>캐딜락</option>
+                <option>마세라티</option>
+                <option>BYD</option>
               </select>
             </div>
             <div>
@@ -734,17 +737,9 @@
 
 
 
- <!-- submit 핸들러 내부만 교체 -->
-const res = await window.__submitInquiry?.(payload).catch(()=>({ok:false}));
-if(res && res.ok){
-  const toast = document.getElementById('toast');
-  toast.textContent = '접수 완료! 곧 상담원이 연락드릴게요.';
-  toast.classList.remove('hidden');
-  setTimeout(()=>toast.classList.add('hidden'), 2500);
-  e.target.reset();
-} else {
-  alert('저장이 실패했어요. 잠시 후 다시 시도하거나 관리자에게 문의해 주세요.');
-}
+  <!-- Toast -->
+  <div id="toast" class="hidden fixed left-1/2 -translate-x-1/2 bottom-6 z-50 rounded-xl bg-neutral-900 text-white px-4 py-3 text-sm shadow-lg">접수 완료! 곧 상담원이 연락드릴게요.</div>
+
   <!-- Minimal JS: UTM capture, smooth scroll, fake submit -->
   <script>
   (function(){
@@ -897,17 +892,19 @@ if(res && res.ok){
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getFirestore, collection, addDoc, serverTimestamp }
     from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  import { getAnalytics, logEvent }
+    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"; <!-- ✅ 추가 -->
 
-  // ✅ Firebase 프로젝트 설정 (사용자가 제공한 값)
-  const firebaseConfig = {
-    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-    authDomain: "familycar-home.firebaseapp.com",
-    projectId: "familycar-home",
-    storageBucket: "familycar-home.firebasestorage.app",
-    messagingSenderId: "69504878653",
-    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-    measurementId: "G-YXV83SLSD0"
-  };
+  // ✅ Firebase 프로젝트 설정 ...
+    const firebaseConfig = {
+      apiKey: 'AIzaSyCzP2wBb0kUX8pSUrEJm4rq2mB2p5m1tYg',
+      authDomain: 'familyauto-quote.firebaseapp.com',
+      projectId: 'familyauto-quote',
+      storageBucket: 'familyauto-quote.appspot.com',
+      messagingSenderId: '1072123456789',
+      appId: '1:1072123456789:web:6f3e9c12ab34f56d78e901',
+      measurementId: 'G-RT555BFG1Z'
+    };
 
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
@@ -926,7 +923,7 @@ if(res && res.ok){
           createdAt: serverTimestamp(),
           meta
         });
-        logEvent(analytics, 'lead_submit', { source: 'index.html', channel: payload.channel || '' });
+        logEvent(analytics, 'lead_submit', { source: 'main.html', channel: payload.channel || '' });
         return { ok: true };
       }catch(err){
         console.error('submitInquiry error', err);
