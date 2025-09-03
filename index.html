@@ -888,11 +888,8 @@
   </script>
   <!-- Firebase (from index.html) -->
 <script type="module" id="firebaseModule">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-  import { getAnalytics, logEvent }
-    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js"; <!-- ✅ 추가 -->
+ import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 
 // ===== Firebase 설정 =====
 const firebaseConfig = {
@@ -906,8 +903,7 @@ const firebaseConfig = {
 };
 
     const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
+const analytics = getAnalytics(app);
 
     // 공개 전송 함수: 폼 데이터 저장 + 이벤트 로깅
     window.__submitInquiry = async function(payload = {}){
