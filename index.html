@@ -890,15 +890,16 @@
     import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
     import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-    const firebaseConfig = {
-      apiKey: 'AIzaSyCzP2wBb0kUX8pSUrEJm4rq2mB2p5m1tYg',
-      authDomain: 'familyauto-quote.firebaseapp.com',
-      projectId: 'familyauto-quote',
-      storageBucket: 'familyauto-quote.appspot.com',
-      messagingSenderId: '1072123456789',
-      appId: '1:1072123456789:web:6f3e9c12ab34f56d78e901',
-      measurementId: 'G-RT555BFG1Z'
-    };
+  // ✅ Firebase 프로젝트 설정 (사용자가 제공한 값)
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+    authDomain: "familycar-home.firebaseapp.com",
+    projectId: "familycar-home",
+    storageBucket: "familycar-home.firebasestorage.app",
+    messagingSenderId: "69504878653",
+    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+    measurementId: "G-YXV83SLSD0"
+  };
 
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
