@@ -885,10 +885,10 @@
   })();
   </script>
   <!-- Firebase (from index.html) -->
-  <script type="module">
-    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js';
-    import { getFirestore, collection, addDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+<script type="module" id="firebaseModule">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, serverTimestamp }
+    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   // ✅ Firebase 프로젝트 설정 (사용자가 제공한 값)
   const firebaseConfig = {
