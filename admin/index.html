@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>관리자 | 패밀리오토플랜 문의 관리</title>
+<meta name="color-scheme" content="light only"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff; --card:#f8fafc; --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.08);
+  --brand:#16a34a; --accent:#0ea5e9; --red:#ef4444; --amber:#f59e0b; --ok:#10b981;
+  --radius:14px; --shadow:0 10px 26px rgba(0,0,0,.08);
+}
+*{box-sizing:border-box} body{margin:0;background:#fff;color:var(--text);font:14.5px/1.6 "Noto Sans KR",system-ui}
+a{color:inherit;text-decoration:none}
+.container{width:min(1200px,94%);margin:0 auto}
+
+.header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
+.header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
+.brand{font-weight:900;display:flex;gap:.55rem;align-items:center}
+.badge{font-size:12px;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;color:#065f46;background:rgba(34,197,94,.10)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.toolbar{margin:14px 0;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
+.toolbar .filters{display:flex;gap:8px;flex-wrap:wrap}
+.toolbar input[type="search"]{width:100%;padding:.8rem 1rem;border-radius:10px;border:1px solid var(--line);background:#fff}
+.btn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:#fff;padding:.7rem 1rem;border-radius:10px;font-weight:800;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff;border-color:transparent}
+.btn.danger{background:#fff;color:#b91c1c;border-color:#fecaca}
+.btn.small{padding:.45rem .7rem;font-weight:700;border-radius:8px}
+.select{padding:.7rem .9rem;border:1px solid var(--line);border-radius:10px;background:#fff}
+
+.table{overflow:auto;border-radius:var(--radius);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:10px;border-bottom:1px solid #eef2f7;vertical-align:top}
+th{white-space:nowrap;text-align:left;background:#f9fafb;font-weight:800;color:#334155}
+tbody tr:hover{background:#fcfdfd}
+.status{display:inline-flex;align-items:center;gap:.35rem;font-weight:800;border-radius:999px;padding:.2rem .55rem;border:1px solid var(--line)}
+.status.new{background:#ecfeff;color:#0369a1}
+.status.in_progress{background:#fff7ed;color:#9a3412}
+.status.done{background:#ecfdf5;color:#065f46}
+.status.absent{background:#f1f5f9;color:#1e293b}
+.status.potential{background:#fefce8;color:#854d0e}
+.status.rejected{background:#fef2f2;color:#991b1b}
+.status.contract{background:#ecfdf5;color:#047857}
+.kv{display:flex;gap:6px;flex-wrap:wrap}
+.kv b{color:#334155}
+
+.login{min-height:100dvh;display:grid;place-items:center}
+.login .panel{width:min(420px,94%);padding:18px}
+.login h1{margin:0 0 8px}
+.login p{color:var(--muted);margin-top:0}
+
+.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:20px;z-index:20}
+.modal .panel{width:min(720px,94%);padding:18px}
+.modal .actions{text-align:right;margin-top:12px}
+textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem}
+</style>
+</head>
+<body>
+
+<div id="app">
+  <!-- 로그인 -->
+  <section class="login" id="loginView">
+    <div class="container">
+      <div class="card panel">
+        <h1>관리자 로그인</h1>
+        <p>승인된 관리자만 접근 가능합니다.</p>
+        <div style="display:grid;gap:10px">
+          <input id="email" type="email" placeholder="이메일" />
+          <input id="password" type="password" placeholder="비밀번호" />
+          <button class="btn primary" id="btnLogin">로그인</button>
+        </div>
+        <div id="loginMsg" style="color:#b91c1c;margin-top:8px"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 대시보드 -->
+  <section id="dashView" style="display:none">
+    <div class="header">
+      <div class="container row">
+        <div class="brand">📊 문의 대시보드 <span class="badge" id="userBadge">-</span></div>
+        <div style="display:flex;gap:8px">
+          <button class="btn" id="btnExport">CSV 내보내기</button>
+          <button class="btn danger" id="btnLogout">로그아웃</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="toolbar">
+        <input type="search" id="q" placeholder="이름/연락처/브랜드/상품 검색…" />
+        <select id="dateRange" class="select">
+          <option value="all">전체기간</option>
+          <option value="today">오늘</option>
+          <option value="7d">최근 7일</option>
+        </select>
+        <select id="status" class="select">
+          <option value="all">전체상태</option>
+          <option value="new">신규</option>
+          <option value="in_progress">진행중</option>
+          <option value="done">완료</option>
+        </select>
+        <div class="filters">
+          <select id="pageSize" class="select">
+            <option>20</option><option>50</option><option>100</option>
+          </select>
+          <button class="btn" id="btnRefresh">새로고침</button>
+        </div>
+      </div>
+
+      <div class="table card">
+        <table id="tbl">
+          <thead>
+            <tr>
+              <th>작성</th>
+              <th>고객</th>
+              <th>연락처</th>
+              <th>브랜드/상품</th>
+              <th>차종/조건</th>
+              <th>메모</th>
+              <th>상태</th>
+              <th>작업</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="loading" style="display:none;margin:10px 0;color:#64748b">불러오는 중…</div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 40px">
+        <div id="count"></div>
+        <div style="display:flex;gap:6px">
+          <button class="btn small" id="prev">이전</button>
+          <button class="btn small" id="next">다음</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- 메모 모달 -->
+<div class="modal" id="memoModal">
+  <div class="card panel">
+    <h3 style="margin-top:0">메모 업데이트</h3>
+    <textarea id="memoText" placeholder="메모를 입력하세요"></textarea>
+    <div class="actions">
+      <button class="btn" data-close>취소</button>
+      <button class="btn primary" id="saveMemo">저장</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="detailModal">
+  <div class="card panel">
+    <h3 style="margin-top:0">문의 상세</h3>
+    <div id="detailBody" style="white-space:pre-wrap"></div>
+    <div class="actions">
+      <button class="btn" data-close>닫기</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+
+// ===== Firebase 설정 =====
+const firebaseConfig = {
+  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+  authDomain: "familycar-home.firebaseapp.com",
+  projectId: "familycar-home",
+  storageBucket: "familycar-home.firebasestorage.app",
+  messagingSenderId: "69504878653",
+  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+  measurementId: "G-YXV83SLSD0"
+};
+
+initializeApp(firebaseConfig);
+const auth = getAuth();
+const db   = getFirestore();
+
+// ===== DOM =====
+const loginView = document.getElementById('loginView');
+const dashView  = document.getElementById('dashView');
+const loginMsg  = document.getElementById('loginMsg');
+const userBadge = document.getElementById('userBadge');
+
+const qEl = document.getElementById('q');
+const statusEl = document.getElementById('status');
+const pageSizeEl = document.getElementById('pageSize');
+const dateRangeEl = document.getElementById('dateRange');
+const loadingEl = document.getElementById('loading');
+const countEl = document.getElementById('count');
+const tbody = document.querySelector('#tbl tbody');
+
+let ALL = []; // 메모리에 적재해서 필터/검색/페이지네이션
+let page = 1;
+
+// ===== 로그인 & 권한 =====
+
+document.getElementById('btnLogin').addEventListener('click', async () => {
+  loginMsg.textContent = '';
+  const email = (document.getElementById('email').value||'').trim();
+  const password = document.getElementById('password').value||'';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged가 이어서 실행됨
+  } catch (e) {
+    loginMsg.textContent = e.message;
+  }
+});
+
+document.getElementById('btnLogout').addEventListener('click', async () => {
+  try { await signOut(auth); } catch(_){}
+});
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) { showLogin(); return; }
+  try {
+    // users/{uid} 문서의 role === 'admin' 확인
+    const snap = await getDoc(doc(db, 'users', user.uid));
+    const role = snap.exists() ? snap.data().role : null;
+    if (role !== 'admin') {
+      loginMsg.textContent = '관리자 권한이 없습니다.';
+      await signOut(auth);
+      showLogin();
+      return;
+    }
+    userBadge.textContent = user.email || '관리자';
+    showDash();
+  } catch (e) {
+    loginMsg.textContent = '권한 확인 실패: ' + e.message;
+    await signOut(auth);
+    showLogin();
+  }
+});
+
+function showLogin(){ loginView.style.display='grid'; dashView.style.display='none'; }
+function showDash(){ loginView.style.display='none'; dashView.style.display='block'; refreshAndLoad(); }
+
+// ===== 데이터 로딩/렌더링 =====
+
+document.getElementById('btnRefresh').onclick = () => { page=1; refreshAndLoad(); };
+document.getElementById('prev').onclick = () => { if(page>1){ page--; render(); } };
+document.getElementById('next').onclick = () => {
+  const ps = Number(pageSizeEl.value);
+  if (page * ps < ALL.length) { page++; render(); }
+};
+qEl.oninput = debounce(() => { page=1; render(); }, 300);
+statusEl.onchange = () => { page=1; render(); };
+pageSizeEl.onchange = () => { page=1; render(); };
+dateRangeEl.onchange = () => { page=1; refreshAndLoad(); };
+
+async function refreshAndLoad(){
+  loadingEl.style.display = 'block';
+  ALL = await fetchInquiries();
+  page = 1;
+  render();
+  loadingEl.style.display = 'none';
+}
+
+// Firestore에서 최근 문의 로딩 (최대 1000건)
+async function fetchInquiries(){
+  const baseQ = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
+  const snap = await getDocs(baseQ);
+  const list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+  // 날짜 필터(클라이언트)
+  const now = new Date();
+  let startDate;
+  if (dateRangeEl.value === 'today') {
+    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else if (dateRangeEl.value === '7d') {
+    startDate = new Date(now.getTime() - 7*24*60*60*1000);
+  }
+  return list.filter(r => {
+    if (!startDate) return true; // 전체기간
+    const t = toDate(r.createdAt);
+    return t ? (t >= startDate) : true;
+  });
+}
+
+function render(){
+  const ps = Number(pageSizeEl.value);
+  let rows = [...ALL];
+
+  // 상태 필터 (툴바 선택값과 동일한 경우만 필터)
+  if (statusEl.value !== 'all') rows = rows.filter(r => r.status === statusEl.value);
+
+  // 텍스트 검색 (이름/전화/브랜드/상품/모델/조건/메시지)
+  const s = qEl.value.trim().toLowerCase();
+  if (s) {
+    rows = rows.filter(r => [r.name, r.phone, r.brand, r.product, r.model, r.terms, r.message]
+      .some(v => (v||'').toString().toLowerCase().includes(s)));
+  }
+
+  // createdAt desc 정렬
+  rows.sort((a,b)=> {
+    const da = toDate(a.createdAt) || new Date(0);
+    const db = toDate(b.createdAt) || new Date(0);
+    return db - da;
+  });
+
+  const total = rows.length;
+  const from = (page-1)*ps;
+  const pageRows = rows.slice(from, from+ps);
+
+  tbody.innerHTML = '';
+  for (const r of pageRows){
+    const created = toDate(r.createdAt);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="white-space:nowrap">${created?created.toLocaleString('ko-KR'):''}</td>
+      <td><div class="kv"><b>${esc(r.name)||'-'}</b></div></td>
+      <td>
+        <div>${esc(fmtPhone(r.phone))||'-'}</div>
+        <button class="btn small" data-copy="${esc(r.phone)||''}">복사</button>
+      </td>
+      <td><div>${esc(r.brand)||'-'} / ${esc(r.product)||'-'}</div></td>
+      <td><div>${esc(r.model)||'-'}<br><span style="color:#64748b">${esc(r.terms)||''}</span></div></td>
+      <td>
+        <div style="max-width:280px;white-space:pre-wrap">${esc(r.memo||'')}</div>
+        <button class="btn small" data-memo="${r.id}">메모</button>
+      </td>
+      <td>
+        <select data-status="${r.id}" class="select">
+          <option value="absent" ${r.status==='absent'?'selected':''}>부재</option>
+          <option value="potential" ${r.status==='potential'?'selected':''}>가망</option>
+          <option value="rejected" ${r.status==='rejected'?'selected':''}>부결</option>
+          <option value="contract" ${r.status==='contract'?'selected':''}>계약</option>
+          <option value="new" ${r.status==='new'?'selected':''}>신규</option>
+          <option value="in_progress" ${r.status==='in_progress'?'selected':''}>진행중</option>
+          <option value="done" ${r.status==='done'?'selected':''}>완료</option>
+        </select>
+      </td>
+      <td>
+        <button class="btn small" data-detail="${r.id}">상세</button>
+      </td>`;
+    tbody.appendChild(tr);
+  }
+
+  countEl.textContent = `총 ${total}건 · ${page}/${Math.max(1, Math.ceil(total/ps))}페이지`;
+}
+
+// ===== 이벤트 위임 =====
+
+tbody.addEventListener('click', async (e)=>{
+  const copyBtn = e.target.closest('[data-copy]');
+  if(copyBtn){ await navigator.clipboard.writeText(copyBtn.dataset.copy||''); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='복사',1200); }
+
+  const detailBtn = e.target.closest('[data-detail]');
+  if(detailBtn){ const id=detailBtn.dataset.detail; const d = ALL.find(x=>x.id===id); if(!d) return; showDetail(d); }
+
+  const memoBtn = e.target.closest('[data-memo]');
+  if(memoBtn){ openMemo(memoBtn.dataset.memo); }
+});
+
+tbody.addEventListener('change', async (e)=>{
+  const sel = e.target.closest('select[data-status]');
+  if(!sel) return;
+  const id = sel.dataset.status;
+  try{
+    await updateDoc(doc(db,'inquiries', id), { status: sel.value });
+    const t = ALL.find(x=>x.id===id); if(t) t.status = sel.value; // 로컬 반영
+  }catch(err){ alert(err.message); }
+});
+
+function showDetail(r){
+  const created = toDate(r.createdAt);
+  const detail = [
+    `작성: ${created?created.toLocaleString('ko-KR'):''}`,
+    `이름: ${r.name||'-'}`,
+    `연락처: ${r.phone||'-'}`,
+    `브랜드/상품: ${r.brand||'-'} / ${r.product||'-'}`,
+    `차종: ${r.model||'-'}`,
+    `조건: ${r.terms||'-'}`,
+    `메시지: ${r.message||'-'}`,
+    `상태: ${r.status||'-'}`,
+    `Referrer: ${r.referrer||'-'}`,
+    `UA: ${r.userAgent||r.user_agent||'-'}`,
+    `페이지: ${r.page||'-'}`,
+    `ID: ${r.id}`
+  ].join('\n');
+  document.getElementById('detailBody').textContent = detail;
+  document.getElementById('detailModal').style.display = 'flex';
+}
+
+// 메모 모달 동작
+const memoModal = document.getElementById('memoModal');
+let memoTargetId = null;
+function openMemo(id){ memoTargetId=id; document.getElementById('memoText').value=''; memoModal.style.display='flex'; }
+document.getElementById('saveMemo').onclick = async ()=>{
+  if(!memoTargetId){ memoModal.style.display='none'; return; }
+  try{
+    await updateDoc(doc(db,'inquiries', memoTargetId), { memo: document.getElementById('memoText').value||'' });
+    const t = ALL.find(x=>x.id===memoTargetId); if(t) t.memo = document.getElementById('memoText').value||'';
+  }catch(err){ alert(err.message); }
+  memoModal.style.display='none'; render();
+};
+document.addEventListener('click', (e)=>{
+  if(e.target.matches('[data-close]')){
+    memoModal.style.display='none';
+    const dm = document.getElementById('detailModal');
+    if(dm) dm.style.display='none';
+  }
+});
+
+// CSV 내보내기 (로컬 ALL 기준)
+document.getElementById('btnExport').onclick = ()=>{
+  const csv = toCSV(ALL);
+  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href=url; a.download=`inquiries_${Date.now()}.csv`; a.click();
+  URL.revokeObjectURL(url);
+};
+
+// ===== 유틸 =====
+function toCSV(rows){
+  if(!rows.length) return '';
+  const cols = ['createdAt','name','phone','brand','product','model','terms','message','status','referrer','userAgent','page','memo','id'];
+  const header = cols.join(',');
+  const lines = rows.map(r => cols.map(c => {
+    let v = r[c];
+    if (c === 'createdAt') {
+      const dt = toDate(r.createdAt);
+      v = dt ? dt.toISOString() : '';
+    }
+    if(typeof v === 'object' && v !== null) v = JSON.stringify(v);
+    v = (v ?? '').toString().replaceAll('"','""');
+    return `"${v}"`;
+  }).join(','));
+  return [header, ...lines].join('\n');
+}
+
+function esc(s){ return (s??'').toString().replace(/[&<>\"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
+function fmtPhone(s){ if(!s) return ''; const d=(s+'').replace(/\D/g,''); if(d.length===10) return d.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3'); if(d.length===11) return d.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'); return s; }
+function toDate(v){ try{ return (v && typeof v.toDate==='function') ? v.toDate() : (v ? new Date(v) : null); }catch(_){ return null; } }
+function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
+
+</script>
+</body>
+</html>
