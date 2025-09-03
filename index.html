@@ -37,8 +37,7 @@
         <!-- <a href="/admin/" class="hover:text-emerald-700">관리</a> -->
       </nav>
       <div class="flex items-center gap-2">
-        <button id="btn-quote" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-sm font-semibold shadow-sm">
-          빠른 견적 받기
+        <button id="btn-quote" class="hidden sm:inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 text-sm font-semibold shadow-sm">빠른 견적 받기</button>
       </div>
     </div>
   </header>
@@ -724,7 +723,7 @@
     </div>
     <div class="mt-8 border-t border-neutral-800">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-5 text-xs text-neutral-400 flex flex-wrap items-center justify-between gap-3">
-        <p>© <span id="year"></spFloating CTA an> 패밀리오토플랜. All rights reserved.</p>
+        <p>© <span id="year"></span> 패밀리오토플랜. All rights reserved.</p>
         <div class="flex items-center gap-4">
           <span class="opacity-60 cursor-not-allowed" aria-disabled="true">이벤트</span>
           <span class="opacity-60 cursor-not-allowed" aria-disabled="true">관리</span>
@@ -888,8 +887,9 @@
   </script>
   <!-- Firebase (from index.html) -->
 <script type="module" id="firebaseModule">
- import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
+import { initializeApp } from "firebase/app";
+import { getAnalytics, logEvent } from "firebase/analytics";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 // ===== Firebase 설정 =====
 const firebaseConfig = {
@@ -902,7 +902,8 @@ const firebaseConfig = {
   measurementId: "G-YXV83SLSD0"
 };
 
-    const app = initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 const analytics = getAnalytics(app);
 
     // 공개 전송 함수: 폼 데이터 저장 + 이벤트 로깅
