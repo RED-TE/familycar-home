@@ -917,7 +917,7 @@
           createdAt: serverTimestamp(),
           meta
         });
-        logEvent(analytics, 'lead_submit', { source: 'main.html', channel: payload.channel || '' });
+        logEvent(analytics, 'lead_submit', { source: 'index.html', channel: payload.channel || '' });
         return { ok: true };
       }catch(err){
         console.error('submitInquiry error', err);
