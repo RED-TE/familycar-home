@@ -867,17 +867,16 @@
       const name = (form.get('name')||'').toString().trim();
       const phone = (form.get('phone')||'').toString().trim();
       const channel = (form.get('channel')||'').toString();
-      const carType = (form.get('carType')||'').toString();
-      const fuel = (form.get('fuel')||'').toString();
-      const budget = (form.get('budget')||'').toString();
-      const period = (form.get('period')||'').toString();
+      const brand   = (form.get('brand')||'').toString(); // ✅ 변경된 필드
+      const period  = (form.get('period')||'').toString();
       const mileage = (form.get('mileage')||'').toString();
       const message = (form.get('message')||'').toString();
 
       if(!name){ alert('성함을 입력해 주세요.'); return; }
       if(!/^[0-9\-]{9,}$/.test(phone)){ alert('연락처를 정확히 입력해 주세요.'); return; }
+      if(!(form.get('brand')||'').toString()){ alert('브랜드를 선택해 주세요.'); return; }
 
-      const payload = {name, phone, channel, carType, fuel, budget, period, mileage, message};
+      const payload = { name, phone, channel, brand, period, mileage, message };
       window.__submitInquiry?.(payload).then((res)=>{ if(res && res.ok){ console.log('Firebase 저장 완료'); } }).catch(console.error);
 
       const toast = document.getElementById('toast');
