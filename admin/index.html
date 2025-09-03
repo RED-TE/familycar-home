@@ -1,447 +1,359 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>관리자 | 패밀리오토플랜 문의 관리</title>
-<meta name="color-scheme" content="light only"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>패밀리오토플랜 관리자</title>
+<meta name="color-scheme" content="light only" />
 <style>
-:root{
-  --bg:#ffffff; --card:#f8fafc; --text:#0f172a; --muted:#475569; --line:rgba(15,23,42,.08);
-  --brand:#16a34a; --accent:#0ea5e9; --red:#ef4444; --amber:#f59e0b; --ok:#10b981;
-  --radius:14px; --shadow:0 10px 26px rgba(0,0,0,.08);
-}
-*{box-sizing:border-box} body{margin:0;background:#fff;color:var(--text);font:14.5px/1.6 "Noto Sans KR",system-ui}
-a{color:inherit;text-decoration:none}
-.container{width:min(1200px,94%);margin:0 auto}
-
-.header{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--line);z-index:10}
-.header .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
-.brand{font-weight:900;display:flex;gap:.55rem;align-items:center}
-.badge{font-size:12px;padding:.2rem .5rem;border:1px solid var(--line);border-radius:999px;color:#065f46;background:rgba(34,197,94,.10)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
-.toolbar{margin:14px 0;display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center}
-.toolbar .filters{display:flex;gap:8px;flex-wrap:wrap}
-.toolbar input[type="search"]{width:100%;padding:.8rem 1rem;border-radius:10px;border:1px solid var(--line);background:#fff}
-.btn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);background:#fff;padding:.7rem 1rem;border-radius:10px;font-weight:800;cursor:pointer}
-.btn.primary{background:var(--brand);color:#fff;border-color:transparent}
-.btn.danger{background:#fff;color:#b91c1c;border-color:#fecaca}
-.btn.small{padding:.45rem .7rem;font-weight:700;border-radius:8px}
-.select{padding:.7rem .9rem;border:1px solid var(--line);border-radius:10px;background:#fff}
-
-.table{overflow:auto;border-radius:var(--radius);border:1px solid var(--line)}
-table{width:100%;border-collapse:collapse;background:#fff}
-th,td{padding:10px;border-bottom:1px solid #eef2f7;vertical-align:top}
-th{white-space:nowrap;text-align:left;background:#f9fafb;font-weight:800;color:#334155}
-tbody tr:hover{background:#fcfdfd}
-.status{display:inline-flex;align-items:center;gap:.35rem;font-weight:800;border-radius:999px;padding:.2rem .55rem;border:1px solid var(--line)}
-.status.new{background:#ecfeff;color:#0369a1}
-.status.in_progress{background:#fff7ed;color:#9a3412}
-.status.done{background:#ecfdf5;color:#065f46}
-.status.absent{background:#f1f5f9;color:#1e293b}
-.status.potential{background:#fefce8;color:#854d0e}
-.status.rejected{background:#fef2f2;color:#991b1b}
-.status.contract{background:#ecfdf5;color:#047857}
-.kv{display:flex;gap:6px;flex-wrap:wrap}
-.kv b{color:#334155}
-
-.login{min-height:100dvh;display:grid;place-items:center}
-.login .panel{width:min(420px,94%);padding:18px}
-.login h1{margin:0 0 8px}
-.login p{color:var(--muted);margin-top:0}
-
-.modal{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45);padding:20px;z-index:20}
-.modal .panel{width:min(720px,94%);padding:18px}
-.modal .actions{text-align:right;margin-top:12px}
-textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:10px;padding:.75rem 1rem}
+  :root{
+    --bg:#fbfbfd; --panel:#fff; --ink:#0f172a; --muted:#64748b; --line:#e5e7eb;
+    --brand:#16a34a; --brand2:#22c55e; --warn:#f59e0b; --danger:#ef4444;
+    --radius:14px; --shadow:0 10px 28px rgba(0,0,0,.08);
+  }
+  *{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Apple SD Gothic Neo,Arial,"Noto Sans KR",sans-serif}
+  .wrap{width:min(1200px,94%);margin:26px auto}
+  header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+  h1{font-size:20px;margin:0}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+  .toolbar{display:grid;grid-template-columns:1fr auto auto;gap:8px;padding:12px}
+  .toolbar .filters{display:flex;gap:8px;flex-wrap:wrap}
+  input,select,button{border:1px solid var(--line);background:#fff;border-radius:10px;padding:.6rem .75rem;font:inherit}
+  button{cursor:pointer;font-weight:800}
+  .btn{background:var(--brand);color:#fff;border-color:transparent}
+  .btn:hover{background:var(--brand2)}
+  .btn-ghost{background:#fff}
+  .btn-danger{background:var(--danger);color:#fff;border-color:transparent}
+  .table{overflow:auto;border-top:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;background:#fff}
+  th,td{padding:.7rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+  th{position:sticky;top:0;background:#f8fafc;font-weight:900}
+  tbody tr:hover{background:#f9fafb}
+  .mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+  .muted{color:var(--muted)}
+  .badge{display:inline-flex;gap:.35rem;align-items:center;border:1px solid var(--line);border-radius:999px;padding:.2rem .55rem;font-size:12px;background:#fff}
+  .status-dot{width:8px;height:8px;border-radius:50%}
+  .ok{background:var(--brand)}
+  .warn{background:var(--warn)}
+  .danger{background:var(--danger)}
+  .footer{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+  .pager{display:flex;gap:6px}
+  .pager button[disabled]{opacity:.4;cursor:not-allowed}
+  .right{display:flex;gap:8px;align-items:center}
+  .sr-only{position:absolute;left:-10000px}
 </style>
 </head>
 <body>
+<div class="wrap">
+  <header>
+    <h1>관리자 대시보드</h1>
+    <div class="right">
+      <span class="badge"><span class="status-dot ok"></span>실시간 연결</span>
+      <button id="exportCsv" class="btn-ghost">CSV 내보내기</button>
+      <button id="refresh" class="btn-ghost">새로고침</button>
+    </div>
+  </header>
 
-<div id="app">
-  <!-- 로그인 -->
-  <section class="login" id="loginView">
-    <div class="container">
-      <div class="card panel">
-        <h1>관리자 로그인</h1>
-        <p>승인된 관리자만 접근 가능합니다.</p>
-        <div style="display:grid;gap:10px">
-          <input id="email" type="email" placeholder="이메일" />
-          <input id="password" type="password" placeholder="비밀번호" />
-          <button class="btn primary" id="btnLogin">로그인</button>
-        </div>
-        <div id="loginMsg" style="color:#b91c1c;margin-top:8px"></div>
+  <!-- 컨트롤바 -->
+  <section class="card">
+    <div class="toolbar">
+      <div class="filters">
+        <input type="search" id="q" placeholder="이름/연락처/브랜드/차종/메모 검색" />
+        <select id="brand">
+          <option value="">브랜드(전체)</option>
+          <option>현대</option><option>기아</option><option>제네시스</option><option>쉐보레</option><option>르노코리아</option><option>KGM</option>
+          <option>BMW</option><option>메르세데스-벤츠</option><option>아우디</option><option>볼보</option><option>폭스바겐</option>
+          <option>토요타</option><option>렉서스</option><option>포드</option><option>미니</option><option>포르쉐</option>
+          <option>혼다</option><option>지프</option><option>랜드로버</option><option>푸조</option>
+          <option>테슬라</option><option>링컨</option><option>캐딜락</option><option>마세라티</option><option>BYD</option>
+        </select>
+        <select id="product">
+          <option value="">상품(전체)</option>
+          <option>장기렌트</option>
+          <option>리스</option>
+        </select>
+        <input type="date" id="from" />
+        <input type="date" id="to" />
+      </div>
+      <div class="right">
+        <label class="muted"><input type="checkbox" id="live" checked /> 실시간</label>
+      </div>
+      <div class="right">
+        <button id="apply" class="btn">필터 적용</button>
       </div>
     </div>
-  </section>
 
-  <!-- 대시보드 -->
-  <section id="dashView" style="display:none">
-    <div class="header">
-      <div class="container row">
-        <div class="brand">📊 문의 대시보드 <span class="badge" id="userBadge">-</span></div>
-        <div style="display:flex;gap:8px">
-          <button class="btn" id="btnExport">CSV 내보내기</button>
-          <button class="btn danger" id="btnLogout">.로그아웃.</button>
-        </div>
-      </div>
+    <div class="table">
+      <table id="grid" aria-describedby="gridCaption">
+        <caption id="gridCaption" class="sr-only">접수 목록</caption>
+        <thead>
+          <tr>
+            <th style="min-width:120px">접수시각</th>
+            <th style="min-width:120px">이름</th>
+            <th style="min-width:140px">연락처</th>
+            <th style="min-width:110px">브랜드</th>
+            <th style="min-width:140px">차종</th>
+            <th style="min-width:110px">상품</th>
+            <th style="min-width:120px">조건</th>
+            <th>요청사항</th>
+            <th style="min-width:110px">채널</th>
+            <th style="min-width:90px">상태</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
 
-    <div class="container">
-      <div class="toolbar">
-        <input type="search" id="q" placeholder="이름/연락처/브랜드/상품 검색…" />
-        <select id="dateRange" class="select">
-          <option value="all">전체기간</option>
-          <option value="today">오늘</option>
-          <option value="7d">최근 7일</option>
-        </select>
-        <select id="status" class="select">
-          <option value="all">전체상태</option>
-          <option value="new">신규</option>
-          <option value="in_progress">진행중</option>
-          <option value="done">완료</option>
-        </select>
-        <div class="filters">
-          <select id="pageSize" class="select">
-            <option>20</option><option>50</option><option>100</option>
-          </select>
-          <button class="btn" id="btnRefresh">새로고침</button>
-        </div>
-      </div>
-
-      <div class="table card">
-        <table id="tbl">
-          <thead>
-            <tr>
-              <th>작성</th>
-              <th>고객</th>
-              <th>연락처</th>
-              <th>브랜드/상품</th>
-              <th>차종/조건</th>
-              <th>메모</th>
-              <th>상태</th>
-              <th>작업</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div id="loading" style="display:none;margin:10px 0;color:#64748b">불러오는 중…</div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin:12px 0 40px">
-        <div id="count"></div>
-        <div style="display:flex;gap:6px">
-          <button class="btn small" id="prev">이전</button>
-          <button class="btn small" id="next">다음</button>
-        </div>
+    <div class="footer">
+      <div class="muted" id="count">0건</div>
+      <div class="pager">
+        <button id="prev" class="btn-ghost" disabled>이전</button>
+        <button id="next" class="btn-ghost" disabled>다음</button>
       </div>
     </div>
   </section>
 </div>
 
-<!-- 메모 모달 -->
-<div class="modal" id="memoModal">
-  <div class="card panel">
-    <h3 style="margin-top:0">메모 업데이트</h3>
-    <textarea id="memoText" placeholder="메모를 입력하세요"></textarea>
-    <div class="actions">
-      <button class="btn" data-close>취소</button>
-      <button class="btn primary" id="saveMemo">저장</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal" id="detailModal">
-  <div class="card panel">
-    <h3 style="margin-top:0">문의 상세</h3>
-    <div id="detailBody" style="white-space:pre-wrap"></div>
-    <div class="actions">
-      <button class="btn" data-close>닫기</button>
-    </div>
-  </div>
-</div>
-
+<!-- Firebase (v11) -->
 <script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+  import {
+    getFirestore, collection, query, orderBy, limit, startAfter, endBefore,
+    onSnapshot, getDocs, Timestamp, where
+  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-// ===== Firebase 설정 (요청하신 familycar-home 그대로 연결) =====
-const firebaseConfig = {
-  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-  authDomain: "familycar-home.firebaseapp.com",
-  projectId: "familycar-home",
-  storageBucket: "familycar-home.appspot.com",
-  messagingSenderId: "69504878653",
-  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-  measurementId: "G-YXV83SLSD0"
-};
+  // === 프로젝트 연결 (요청한 설정) ===
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+    authDomain: "familycar-home.firebaseapp.com",
+    projectId: "familycar-home",
+    storageBucket: "familycar-home.appspot.com",
+    messagingSenderId: "69504878653",
+    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+    measurementId: "G-YXV83SLSD0"
+  };
 
-initializeApp(firebaseConfig);
-const auth = getAuth();
-const db   = getFirestore();
+  const app = initializeApp(firebaseConfig);
+  const db  = getFirestore(app);
 
-// ===== DOM =====
-const loginView = document.getElementById('loginView');
-const dashView  = document.getElementById('dashView');
-const loginMsg  = document.getElementById('loginMsg');
-const userBadge = document.getElementById('userBadge');
+  // ====== 상태 ======
+  const state = {
+    pageSize: 50,
+    cursors: { first: null, last: null, stack: [] }, // 간단한 페이징
+    unsubscribe: null
+  };
 
-const qEl = document.getElementById('q');
-const statusEl = document.getElementById('status');
-const pageSizeEl = document.getElementById('pageSize');
-const dateRangeEl = document.getElementById('dateRange');
-const loadingEl = document.getElementById('loading');
-const countEl = document.getElementById('count');
-const tbody = document.querySelector('#tbl tbody');
+  // ====== 유틸 ======
+  const $ = (s)=>document.querySelector(s);
+  const tbody = $("#grid tbody");
+  const $count = $("#count");
+  const $prev = $("#prev");
+  const $next = $("#next");
 
-let ALL = []; // 메모리에 적재해서 필터/검색/페이지네이션
-let page = 1;
+  const phoneMask = (v="")=>{
+    const d = v.replace(/\D/g,"");
+    if (d.length <= 7) return v;
+    return d.replace(/(\d{3})(\d{2,4})(\d{4})/, (_,$1,$2,$3)=>`${$1}-${"*".repeat($2.length)}-${$3}`);
+  };
+  const fmt = (ts)=>{
+    if (!ts) return "";
+    const d = ts.seconds ? new Date(ts.seconds*1000) : new Date(ts);
+    const pad = n=>String(n).padStart(2,"0");
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  };
 
-// ===== 로그인 & 권한 =====
-
-document.getElementById('btnLogin').addEventListener('click', async () => {
-  loginMsg.textContent = '';
-  const email = (document.getElementById('email').value||'').trim();
-  const password = document.getElementById('password').value||'';
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    // onAuthStateChanged가 이어서 실행됨
-  } catch (e) {
-    loginMsg.textContent = e.message;
+  // ====== 쿼리 빌더 ======
+  function buildBaseQuery(){
+    // 기본: 최근순
+    let q = query(collection(db, "inquiries"), orderBy("createdAt","desc"), limit(state.pageSize));
+    return q;
   }
-});
 
-document.getElementById('btnLogout').addEventListener('click', async () => {
-  try { await signOut(auth); } catch(_){}
-});
+  // 서버 필터 없이 클라이언트 필터/검색(간단/유연)
+  function clientFilter(rows){
+    const q = $("#q").value.trim().toLowerCase();
+    const brand = $("#brand").value.trim();
+    const product = $("#product").value.trim();
+    const from = $("#from").value ? new Date($("#from").value) : null;
+    const to = $("#to").value ? new Date($("#to").value + "T23:59:59") : null;
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user) { showLogin(); return; }
-  try {
-    // users/{uid} 문서의 role === 'admin' 확인
-    const snap = await getDoc(doc(db, 'users', user.uid));
-    const role = snap.exists() ? snap.data().role : null;
-    if (role !== 'admin') {
-      loginMsg.textContent = '관리자 권한이 없습니다.';
-      await signOut(auth);
-      showLogin();
-      return;
+    return rows.filter(r=>{
+      if (brand && r.brand !== brand) return false;
+      if (product && r.product !== product) return false;
+      if (from && r.createdAt && new Date(r.createdAt.seconds*1000) < from) return false;
+      if (to && r.createdAt && new Date(r.createdAt.seconds*1000) > to) return false;
+
+      if (!q) return true;
+      const hay = [
+        r.name, r.phone, r.brand, r.model, r.product, r.terms, r.message, r.channel
+      ].filter(Boolean).join(" ").toLowerCase();
+      return hay.includes(q);
+    });
+  }
+
+  // ====== 렌더 ======
+  function render(rows){
+    const filtered = clientFilter(rows);
+    $count.textContent = `${filtered.length}건 (표시 기준)`;
+    tbody.innerHTML = filtered.map(r => {
+      const statusBadge = `<span class="badge"><span class="status-dot ${r.status==="done"?"ok":r.status==="hold"?"warn":"danger"}"></span>${r.status||"new"}</span>`;
+      return `
+        <tr>
+          <td class="mono">${fmt(r.createdAt)}</td>
+          <td>${r.name||""}</td>
+          <td class="mono">${phoneMask(r.phone||"")}</td>
+          <td>${r.brand||""}</td>
+          <td>${r.model||""}</td>
+          <td>${r.product||""}</td>
+          <td>${r.terms||""}</td>
+          <td>${(r.message||"").replace(/\n/g,"<br>")}</td>
+          <td>${r.channel||""}</td>
+          <td>${statusBadge}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // ====== 페이지 로드 (초기/다시 불러오기) ======
+  let currentRows = [];
+
+  async function loadPage(afterDoc=null){
+    // 실시간 모드 해제
+    if (state.unsubscribe){ state.unsubscribe(); state.unsubscribe = null; }
+
+    let q = buildBaseQuery();
+    if (afterDoc){ // 다음 페이지
+      q = query(collection(db,"inquiries"), orderBy("createdAt","desc"), startAfter(afterDoc), limit(state.pageSize));
     }
-    userBadge.textContent = user.email || '관리자';
-    showDash();
-  } catch (e) {
-    loginMsg.textContent = '권한 확인 실패: ' + e.message;
-    await signOut(auth);
-    showLogin();
-  }
-});
 
-function showLogin(){ loginView.style.display='grid'; dashView.style.display='none'; }
-function showDash(){ loginView.style.display='none'; dashView.style.display='block'; refreshAndLoad(); }
+    const snap = await getDocs(q);
+    currentRows = snap.docs.map(doc=>{
+      const d = doc.data() || {};
+      // 필드 정규화(폼 스키마 변경을 대비해 안전하게)
+      return {
+        id: doc.id,
+        createdAt: d.createdAt || d._createdAt || d.ts || null,
+        name: d.name || "",
+        phone: d.phone || "",
+        brand: d.brand || d.carBrand || "",
+        model: d.model || d.carType || "",
+        product: d.product || "",
+        terms: d.terms || "",
+        message: d.message || "",
+        channel: d.channel || d.source || "",
+        status: d.status || "new"
+      };
+    });
 
-// ===== 데이터 로딩/렌더링 =====
+    // 커서/페이저
+    state.cursors.first = snap.docs[0] || null;
+    state.cursors.last  = snap.docs[snap.docs.length-1] || null;
+    $prev.disabled = state.cursors.stack.length===0;
+    $next.disabled = snap.size < state.pageSize;
 
-document.getElementById('btnRefresh').onclick = () => { page=1; refreshAndLoad(); };
-document.getElementById('prev').onclick = () => { if(page>1){ page--; render(); } };
-document.getElementById('next').onclick = () => {
-  const ps = Number(pageSizeEl.value);
-  if (page * ps < ALL.length) { page++; render(); }
-};
-qEl.oninput = debounce(() => { page=1; render(); }, 300);
-statusEl.onchange = () => { page=1; render(); };
-pageSizeEl.onchange = () => { page=1; render(); };
-dateRangeEl.onchange = () => { page=1; refreshAndLoad(); };
+    render(currentRows);
 
-async function refreshAndLoad(){
-  loadingEl.style.display = 'block';
-  ALL = await fetchInquiries();
-  page = 1;
-  render();
-  loadingEl.style.display = 'none';
-}
-
-// Firestore에서 최근 문의 로딩 (최대 1000건)
-async function fetchInquiries(){
-  const baseQ = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
-  const snap = await getDocs(baseQ);
-  const list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
-
-  // 날짜 필터(클라이언트)
-  const now = new Date();
-  let startDate;
-  if (dateRangeEl.value === 'today') {
-    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  } else if (dateRangeEl.value === '7d') {
-    startDate = new Date(now.getTime() - 7*24*60*60*1000);
-  }
-  return list.filter(r => {
-    if (!startDate) return true; // 전체기간
-    const t = toDate(r.createdAt);
-    return t ? (t >= startDate) : true;
-  });
-}
-
-function render(){
-  const ps = Number(pageSizeEl.value);
-  let rows = [...ALL];
-
-  // 상태 필터 (툴바 선택값과 동일한 경우만 필터)
-  if (statusEl.value !== 'all') rows = rows.filter(r => r.status === statusEl.value);
-
-  // 텍스트 검색 (이름/전화/브랜드/상품/모델/조건/메시지)
-  const s = qEl.value.trim().toLowerCase();
-  if (s) {
-    rows = rows.filter(r => [r.name, r.phone, r.brand, r.product, r.model, r.terms, r.message]
-      .some(v => (v||'').toString().toLowerCase().includes(s)));
-  }
-
-  // createdAt desc 정렬
-  rows.sort((a,b)=> {
-    const da = toDate(a.createdAt) || new Date(0);
-    const db = toDate(b.createdAt) || new Date(0);
-    return db - da;
-  });
-
-  const total = rows.length;
-  const from = (page-1)*ps;
-  const pageRows = rows.slice(from, from+ps);
-
-  tbody.innerHTML = '';
-  for (const r of pageRows){
-    const created = toDate(r.createdAt);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="white-space:nowrap">${created?created.toLocaleString('ko-KR'):''}</td>
-      <td><div class="kv"><b>${esc(r.name)||'-'}</b></div></td>
-      <td>
-        <div>${esc(fmtPhone(r.phone))||'-'}</div>
-        <button class="btn small" data-copy="${esc(r.phone)||''}">복사</button>
-      </td>
-      <td><div>${esc(r.brand)||'-'} / ${esc(r.product)||'-'}</div></td>
-      <td><div>${esc(r.model)||'-'}<br><span style="color:#64748b">${esc(r.terms)||''}</span></div></td>
-      <td>
-        <div style="max-width:280px;white-space:pre-wrap">${esc(r.memo||'')}</div>
-        <button class="btn small" data-memo="${r.id}">메모</button>
-      </td>
-      <td>
-        <select data-status="${r.id}" class="select">
-          <option value="absent" ${r.status==='absent'?'selected':''}>부재</option>
-          <option value="potential" ${r.status==='potential'?'selected':''}>가망</option>
-          <option value="rejected" ${r.status==='rejected'?'selected':''}>부결</option>
-          <option value="contract" ${r.status==='contract'?'selected':''}>계약</option>
-          <option value="new" ${r.status==='new'?'selected':''}>신규</option>
-          <option value="in_progress" ${r.status==='in_progress'?'selected':''}>진행중</option>
-          <option value="done" ${r.status==='done'?'selected':''}>완료</option>
-        </select>
-      </td>
-      <td>
-        <button class="btn small" data-detail="${r.id}">상세</button>
-      </td>`;
-    tbody.appendChild(tr);
-  }
-
-  countEl.textContent = `총 ${total}건 · ${page}/${Math.max(1, Math.ceil(total/ps))}페이지`;
-}
-
-// ===== 이벤트 위임 =====
-
-tbody.addEventListener('click', async (e)=>{
-  const copyBtn = e.target.closest('[data-copy]');
-  if(copyBtn){ await navigator.clipboard.writeText(copyBtn.dataset.copy||''); copyBtn.textContent='복사됨'; setTimeout(()=>copyBtn.textContent='복사',1200); }
-
-  const detailBtn = e.target.closest('[data-detail]');
-  if(detailBtn){ const id=detailBtn.dataset.detail; const d = ALL.find(x=>x.id===id); if(!d) return; showDetail(d); }
-
-  const memoBtn = e.target.closest('[data-memo]');
-  if(memoBtn){ openMemo(memoBtn.dataset.memo); }
-});
-
-tbody.addEventListener('change', async (e)=>{
-  const sel = e.target.closest('select[data-status]');
-  if(!sel) return;
-  const id = sel.dataset.status;
-  try{
-    await updateDoc(doc(db,'inquiries', id), { status: sel.value });
-    const t = ALL.find(x=>x.id===id); if(t) t.status = sel.value; // 로컬 반영
-  }catch(err){ alert(err.message); }
-});
-
-function showDetail(r){
-  const created = toDate(r.createdAt);
-  const detail = [
-    `작성: ${created?created.toLocaleString('ko-KR'):''}`,
-    `이름: ${r.name||'-'}`,
-    `연락처: ${r.phone||'-'}`,
-    `브랜드/상품: ${r.brand||'-'} / ${r.product||'-'}`,
-    `차종: ${r.model||'-'}`,
-    `조건: ${r.terms||'-'}`,
-    `메시지: ${r.message||'-'}`,
-    `상태: ${r.status||'-'}`,
-    `Referrer: ${r.referrer||'-'}`,
-    `UA: ${r.userAgent||r.user_agent||'-'}`,
-    `페이지: ${r.page||'-'}`,
-    `ID: ${r.id}`
-  ].join('\n');
-  document.getElementById('detailBody').textContent = detail;
-  document.getElementById('detailModal').style.display = 'flex';
-}
-
-// 메모 모달 동작
-const memoModal = document.getElementById('memoModal');
-let memoTargetId = null;
-function openMemo(id){ memoTargetId=id; document.getElementById('memoText').value=''; memoModal.style.display='flex'; }
-document.getElementById('saveMemo').onclick = async ()=>{
-  if(!memoTargetId){ memoModal.style.display='none'; return; }
-  try{
-    await updateDoc(doc(db,'inquiries', memoTargetId), { memo: document.getElementById('memoText').value||'' });
-    const t = ALL.find(x=>x.id===memoTargetId); if(t) t.memo = document.getElementById('memoText').value||'';
-  }catch(err){ alert(err.message); }
-  memoModal.style.display='none'; render();
-};
-document.addEventListener('click', (e)=>{
-  if(e.target.matches('[data-close]')){
-    memoModal.style.display='none';
-    const dm = document.getElementById('detailModal');
-    if(dm) dm.style.display='none';
-  }
-});
-
-// CSV 내보내기 (로컬 ALL 기준)
-document.getElementById('btnExport').onclick = ()=>{
-  const csv = toCSV(ALL);
-  const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download=`inquiries_${Date.now()}.csv`; a.click();
-  URL.revokeObjectURL(url);
-};
-
-// ===== 유틸 =====
-function toCSV(rows){
-  if(!rows.length) return '';
-  const cols = ['createdAt','name','phone','brand','product','model','terms','message','status','referrer','userAgent','page','memo','id'];
-  const header = cols.join(',');
-  const lines = rows.map(r => cols.map(c => {
-    let v = r[c];
-    if (c === 'createdAt') {
-      const dt = toDate(r.createdAt);
-      v = dt ? dt.toISOString() : '';
+    // 실시간 모드면 동기화
+    if ($("#live").checked){
+      const liveQ = buildBaseQuery(); // 첫 페이지 기준 실시간
+      state.unsubscribe = onSnapshot(liveQ, liveSnap=>{
+        currentRows = liveSnap.docs.map(doc=>{
+          const d = doc.data() || {};
+          return {
+            id: doc.id,
+            createdAt: d.createdAt || d._createdAt || d.ts || null,
+            name: d.name || "",
+            phone: d.phone || "",
+            brand: d.brand || d.carBrand || "",
+            model: d.model || d.carType || "",
+            product: d.product || "",
+            terms: d.terms || "",
+            message: d.message || "",
+            channel: d.channel || d.source || "",
+            status: d.status || "new"
+          };
+        });
+        render(currentRows);
+      });
     }
-    if(typeof v === 'object' && v !== null) v = JSON.stringify(v);
-    v = (v ?? '').toString().replaceAll('"','""');
-    return `"${v}"`;
-  }).join(','));
-  return [header, ...lines].join('\n');
-}
+  }
 
-function esc(s){ return (s??'').toString().replace(/[&<>\"]/g, m=>({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[m])); }
-function fmtPhone(s){ if(!s) return ''; const d=(s+'').replace(/\D/g,''); if(d.length===10) return d.replace(/(\d{3})(\d{3})(\d{4})/,'$1-$2-$3'); if(d.length===11) return d.replace(/(\d{3})(\d{4})(\d{4})/,'$1-$2-$3'); return s; }
-function toDate(v){ try{ return (v && typeof v.toDate==='function') ? v.toDate() : (v ? new Date(v) : null); }catch(_){ return null; } }
-function debounce(fn,ms){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>fn(...a),ms); }; }
+  // ====== 이벤트 ======
+  $("#apply").addEventListener("click", ()=>render(currentRows));
+  $("#q").addEventListener("input", ()=>render(currentRows));
+  $("#brand").addEventListener("change", ()=>render(currentRows));
+  $("#product").addEventListener("change", ()=>render(currentRows));
+  $("#from").addEventListener("change", ()=>render(currentRows));
+  $("#to").addEventListener("change", ()=>render(currentRows));
+  $("#live").addEventListener("change", ()=>loadPage()); // 실시간 토글 시 재구독
+  $("#refresh").addEventListener("click", ()=>loadPage());
 
+  $next.addEventListener("click", async ()=>{
+    if (!$next.disabled && state.cursors.last){
+      state.cursors.stack.push(state.cursors.first);
+      await loadPage(state.cursors.last);
+      $prev.disabled = false;
+    }
+  });
+  $prev.addEventListener("click", async ()=>{
+    const prevCursor = state.cursors.stack.pop();
+    if (prevCursor){
+      // 이전 페이지: createdAt desc에서 endBefore 사용
+      const q = query(collection(db,"inquiries"), orderBy("createdAt","desc"), endBefore(prevCursor), limit(state.pageSize));
+      const snap = await getDocs(q);
+      currentRows = snap.docs.map(doc=>{
+        const d = doc.data() || {};
+        return {
+          id: doc.id,
+          createdAt: d.createdAt || d._createdAt || d.ts || null,
+          name: d.name || "",
+          phone: d.phone || "",
+          brand: d.brand || d.carBrand || "",
+          model: d.model || d.carType || "",
+          product: d.product || "",
+          terms: d.terms || "",
+          message: d.message || "",
+          channel: d.channel || d.source || "",
+          status: d.status || "new"
+        };
+      });
+      state.cursors.first = snap.docs[0] || null;
+      state.cursors.last  = snap.docs[snap.docs.length-1] || null;
+      $prev.disabled = state.cursors.stack.length===0;
+      $next.disabled = snap.size < state.pageSize;
+      render(currentRows);
+    }
+  });
+
+  // CSV 내보내기
+  $("#exportCsv").addEventListener("click", ()=>{
+    const rows = [["createdAt","name","phone","brand","model","product","terms","message","channel","status"]];
+    clientFilter(currentRows).forEach(r=>{
+      rows.push([
+        fmt(r.createdAt),
+        r.name||"",
+        r.phone||"",
+        r.brand||"",
+        r.model||"",
+        r.product||"",
+        r.terms||"",
+        (r.message||"").replace(/\n/g," "),
+        r.channel||"",
+        r.status||"new"
+      ]);
+    });
+    const csv = rows.map(cols => cols.map(v => `"${String(v).replace(/"/g,'""')}"`).join(",")).join("\n");
+    const blob = new Blob([csv], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `inquiries_${Date.now()}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // 초기 로드
+  loadPage();
 </script>
+
 </body>
 </html>
