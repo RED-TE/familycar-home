@@ -736,8 +736,13 @@
 
 
 
-  <!-- Toast -->
-  <div id="toast" class="hidden fixed left-1/2 -translate-x-1/2 bottom-6 z-50 rounded-xl bg-neutral-900 text-white px-4 py-3 text-sm shadow-lg">접수 완료! 곧 상담원이 연락드릴게요.</div>
+  <!-- Modal: Form Submission Success -->
+  <div id="success-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/70">
+    <div class="bg-white rounded-3xl p-8 shadow-2xl flex flex-col items-center max-w-xs w-full mx-4">
+      <span class="text-2xl font-bold mb-4 text-center">신청이 완료되었습니다!</span>
+      <button id="modal-close-btn" class="mt-6 px-6 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-lg focus:outline-none">확인</button>
+    </div>
+  </div>
 
   <!-- Minimal JS: UTM capture, smooth scroll, fake submit -->
   <script>
@@ -859,7 +864,7 @@
     if(src){ document.getElementById('utm-note').textContent += ' (유입: ' + src + ')'; }
     document.getElementById('year').textContent = new Date().getFullYear();
 
-    // ===== 폼 제출 (Firebase 저장 + 토스트) =====
+    // ===== 폼 제출 (Firebase 저장 + 모달) =====
     document.getElementById('quote-form').addEventListener('submit', function(e){
       e.preventDefault();
       const form = new FormData(e.target);
@@ -878,10 +883,22 @@
       const payload = { name, phone, channel, brand, period, mileage, message };
       window.__submitInquiry?.(payload).then((res)=>{ if(res && res.ok){ console.log('Firebase 저장 완료'); } }).catch(console.error);
 
-      const toast = document.getElementById('toast');
-      toast.classList.remove('hidden');
-      setTimeout(()=>toast.classList.add('hidden'), 2500);
+      // Show modal
+      const modal = document.getElementById('success-modal');
+      modal.classList.remove('hidden');
+      // Optionally, trap focus
+      setTimeout(function() {
+        document.getElementById('modal-close-btn')?.focus();
+      }, 100);
       e.target.reset();
+    });
+    // Modal close logic
+    document.getElementById('modal-close-btn')?.addEventListener('click', function() {
+      document.getElementById('success-modal').classList.add('hidden');
+    });
+    // Optional: close modal on background click
+    document.getElementById('success-modal')?.addEventListener('click', function(e){
+      if(e.target === this){ this.classList.add('hidden'); }
     });
   })();
   </script>
@@ -890,23 +907,30 @@
 <script type="module" id="firebaseModule">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
   import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
-  import { getFirestore, collection, addDoc, serverTimestamp }
-    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   // ✅ index.html과 동일한 설정 사용
-  const firebaseConfig = {
-    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-    authDomain: "familycar-home.firebaseapp.com",
-    projectId: "familycar-home",
-    storageBucket: "familycar-home.firebasestorage.app",
-    messagingSenderId: "69504878653",
-    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-    measurementId: "G-YXV83SLSD0"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyBp5RDs87mLocfgPZ-oI_GfQ-Lr8SM4xK0",
+  authDomain: "familyauto-71c11.firebaseapp.com",
+  projectId: "familyauto-71c11",
+  storageBucket: "familyauto-71c11.firebasestorage.app",
+  messagingSenderId: "251564150896",
+  appId: "1:251564150896:web:9bc80da30329ee9cf0e4b5",
+  measurementId: "G-PVBC1NH5TG"
+};
 
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
   const analytics = getAnalytics(app);
+
+  // --- Firestore collection listener for admin page test ---
+  import { query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+  const q = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(100));
+  onSnapshot(q, (snap) => {
+    console.log("실시간 문의 수:", snap.size);
+    snap.forEach(doc => console.log("문의:", doc.data()));
+  });
 
   // 공개 전송 함수: 폼 데이터 저장 + 이벤트 로깅
   window.__submitInquiry = async function(payload = {}){
@@ -917,7 +941,6 @@
         utm: location.search || '',
       };
 
-      // ❌ .payload 오타 제거, ✅ 전개 연산자로 바꿔서 병합
       await addDoc(collection(db, 'inquiries'), {
         ...payload,
         createdAt: serverTimestamp(),
@@ -929,6 +952,7 @@
     }catch(err){
       console.error('submitInquiry error', err);
       logEvent(analytics, 'lead_submit_error', { message: String(err && err.message || err) });
+      alert("제출 오류: " + err.message);
       return { ok:false, error: String(err && err.message || err) };
     }
   }
@@ -957,10 +981,10 @@
       'images/cars/glc-300','images/cars/glc300','images/cars/glc','images/cars/mercedes-glc','images/cars/mercedes_glc'
     ]],
     ['아우디 Q6 e-tron Performance', [
-      'images/cars/q6-e-tron','images/cars/q6etron','images/cars/q6_e-tron','images/cars/q6','Q6 e-tron_Performance'
+      'images/cars/q6-e-tron','images/cars/q6etron','images/cars/q6_e-tron','images/cars/q6','images/cars/q6_performance'
     ]],
     ['아우디 Q4 e-tron 45', [
-      'images/cars/q4-e-tron','images/cars/q4etron','images/cars/q4_e-tron','images/cars/q4','Q4 e-tron_45'
+      'images/cars/q4-e-tron','images/cars/q4etron','images/cars/q4_e-tron','images/cars/q4','images/cars/q4_45'
     ]],
     ['BMW 520i M Sport', [
       'images/cars/520i','images/cars/bmw-520i','images/cars/bmw_520i','images/cars/5-series','images/cars/5series','images/cars/g60'
@@ -1054,10 +1078,10 @@
       ['images/cars/320i','images/cars/3-series','images/cars/3series','images/cars/bmw-320i','images/cars/bmw_320i'].forEach(x=>out.add(x));
     }
     if(/Q6\s*e-?tron/i.test(title)){
-      ['Q6 e-tron_Performance','images/cars/q6-e-tron','images/cars/q6etron','images/cars/q6_e-tron','images/cars/q6'].forEach(x=>out.add(x));
+      ['images/cars/q6_performance','images/cars/q6-e-tron','images/cars/q6etron','images/cars/q6_e-tron','images/cars/q6'].forEach(x=>out.add(x));
     }
     if(/Q4\s*e-?tron/i.test(title)){
-      ['Q4 e-tron_45','images/cars/q4-e-tron','images/cars/q4etron','images/cars/q4_e-tron','images/cars/q4'].forEach(x=>out.add(x));
+      ['images/cars/q4_45','images/cars/q4-e-tron','images/cars/q4etron','images/cars/q4_e-tron','images/cars/q4'].forEach(x=>out.add(x));
     }
     return Array.from(out);
   }
@@ -1101,7 +1125,22 @@
     if(!slot) return;
 
     // 명시 경로 우선
-    const explicit = slot.getAttribute('data-src') || card.getAttribute('data-img');
+    let explicit = slot.getAttribute('data-src') || card.getAttribute('data-img');
+    // Normalize known uppercase image names in data-src to lowercase
+    if (explicit) {
+      // Only change last segment (filename) to lowercase, preserving path
+      const parts = explicit.split('/');
+      if (parts.length > 0) {
+        const fname = parts[parts.length-1];
+        // If the filename is all uppercase or mixed, convert to lowercase and underscores
+        // e.g. BMW_3_Series.png → bmw_3_series.png
+        if (/^[A-Za-z0-9_\-\.\s]+$/.test(fname)) {
+          // Normalize: replace spaces with underscores, lowercase
+          parts[parts.length-1] = fname.replace(/\s+/g,'_').toLowerCase();
+        }
+        explicit = parts.join('/');
+      }
+    }
     const title = (card.querySelector('.font-bold')?.textContent || '').trim();
 
     let bases = [];

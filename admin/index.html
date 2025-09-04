@@ -116,22 +116,20 @@
 
 <!-- Firebase (v11) -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-  import {
-    getFirestore, collection, query, orderBy, limit, startAfter, endBefore,
-    onSnapshot, getDocs, Timestamp, where
-  } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, query, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
-  // === 프로젝트 연결 (요청한 설정) ===
-  const firebaseConfig = {
-    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-    authDomain: "familycar-home.firebaseapp.com",
-    projectId: "familycar-home",
-    storageBucket: "familycar-home.appspot.com",
-    messagingSenderId: "69504878653",
-    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-    measurementId: "G-YXV83SLSD0"
-  };
+// ===== Firebase 설정 =====
+const firebaseConfig = {
+  apiKey: "AIzaSyBp5RDs87mLocfgPZ-oI_GfQ-Lr8SM4xK0",
+  authDomain: "familyauto-71c11.firebaseapp.com",
+  projectId: "familyauto-71c11",
+  storageBucket: "familyauto-71c11.firebasestorage.app",
+  messagingSenderId: "251564150896",
+  appId: "1:251564150896:web:9bc80da30329ee9cf0e4b5",
+  measurementId: "G-PVBC1NH5TG"
+};
 
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
@@ -150,17 +148,9 @@
   const $prev = $("#prev");
   const $next = $("#next");
 
-  const phoneMask = (v="")=>{
-    const d = v.replace(/\D/g,"");
-    if (d.length <= 7) return v;
-    return d.replace(/(\d{3})(\d{2,4})(\d{4})/, (_,$1,$2,$3)=>`${$1}-${"*".repeat($2.length)}-${$3}`);
-  };
-  const fmt = (ts)=>{
-    if (!ts) return "";
-    const d = ts.seconds ? new Date(ts.seconds*1000) : new Date(ts);
-    const pad = n=>String(n).padStart(2,"0");
-    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
-  };
+let ALL = []; // 메모리에 적재해서 필터/검색/페이지네이션
+let page = 1;
+let unsubscribe = null;
 
   // ====== 쿼리 빌더 ======
   function buildBaseQuery(){
@@ -288,41 +278,101 @@
   $("#live").addEventListener("change", ()=>loadPage()); // 실시간 토글 시 재구독
   $("#refresh").addEventListener("click", ()=>loadPage());
 
-  $next.addEventListener("click", async ()=>{
-    if (!$next.disabled && state.cursors.last){
-      state.cursors.stack.push(state.cursors.first);
-      await loadPage(state.cursors.last);
-      $prev.disabled = false;
-    }
+// ===== 데이터 로딩/렌더링 =====
+
+document.getElementById('btnRefresh').onclick = () => { page=1; refreshAndLoad(); };
+document.getElementById('prev').onclick = () => { if(page>1){ page--; render(); } };
+document.getElementById('next').onclick = () => {
+  const ps = Number(pageSizeEl.value);
+  if (page * ps < ALL.length) { page++; render(); }
+};
+qEl.oninput = debounce(() => { page=1; render(); }, 300);
+statusEl.onchange = () => { page=1; render(); };
+pageSizeEl.onchange = () => { page=1; render(); };
+dateRangeEl.onchange = () => { page=1; render(); };
+
+async function refreshAndLoad(){
+  // 실시간 구독 시작
+  startRealtime();
+}
+
+function startRealtime(){
+  loadingEl.style.display = 'block';
+  // 기존 구독 해제
+  if (typeof unsubscribe === 'function') { unsubscribe(); unsubscribe = null; }
+
+  const qRef = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
+  unsubscribe = onSnapshot(qRef, (snap) => {
+    const raw = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+    // 날짜 필터는 렌더 단계에서 처리하므로 원본을 저장
+    ALL = raw;
+
+    page = 1;
+    render();
+    loadingEl.style.display = 'none';
+  }, (err) => {
+    console.error('[admin] onSnapshot error:', err);
+    loadingEl.style.display = 'none';
+    alert('실시간 구독 오류: ' + (err.message || err));
   });
-  $prev.addEventListener("click", async ()=>{
-    const prevCursor = state.cursors.stack.pop();
-    if (prevCursor){
-      // 이전 페이지: createdAt desc에서 endBefore 사용
-      const q = query(collection(db,"inquiries"), orderBy("createdAt","desc"), endBefore(prevCursor), limit(state.pageSize));
-      const snap = await getDocs(q);
-      currentRows = snap.docs.map(doc=>{
-        const d = doc.data() || {};
-        return {
-          id: doc.id,
-          createdAt: d.createdAt || d._createdAt || d.ts || null,
-          name: d.name || "",
-          phone: d.phone || "",
-          brand: d.brand || d.carBrand || "",
-          model: d.model || d.carType || "",
-          product: d.product || "",
-          terms: d.terms || "",
-          message: d.message || "",
-          channel: d.channel || d.source || "",
-          status: d.status || "new"
-        };
-      });
-      state.cursors.first = snap.docs[0] || null;
-      state.cursors.last  = snap.docs[snap.docs.length-1] || null;
-      $prev.disabled = state.cursors.stack.length===0;
-      $next.disabled = snap.size < state.pageSize;
-      render(currentRows);
-    }
+}
+
+// (미사용) onSnapshot 실시간 모드로 대체됨
+async function fetchInquiries(){
+  const baseQ = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
+  const snap = await getDocs(baseQ);
+  const list = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+  // 날짜 필터(클라이언트)
+  const now = new Date();
+  let startDate;
+  if (dateRangeEl.value === 'today') {
+    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else if (dateRangeEl.value === '7d') {
+    startDate = new Date(now.getTime() - 7*24*60*60*1000);
+  }
+  return list.filter(r => {
+    if (!startDate) return true; // 전체기간
+    const t = toDate(r.createdAt);
+    return t ? (t >= startDate) : true;
+  });
+}
+
+function render(){
+  const ps = Number(pageSizeEl.value);
+  let rows = [...ALL];
+
+  // 날짜 필터 (클라이언트 측)
+  const now = new Date();
+  let startDate;
+  if (dateRangeEl.value === 'today') {
+    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else if (dateRangeEl.value === '7d') {
+    startDate = new Date(now.getTime() - 7*24*60*60*1000);
+  }
+  if (startDate) {
+    rows = rows.filter(r => {
+      const t = toDate(r.createdAt);
+      return t ? (t >= startDate) : true;
+    });
+  }
+
+  // 상태 필터 (툴바 선택값과 동일한 경우만 필터)
+  if (statusEl.value !== 'all') rows = rows.filter(r => r.status === statusEl.value);
+
+  // 텍스트 검색 (이름/전화/브랜드/상품/모델/조건/메시지)
+  const s = qEl.value.trim().toLowerCase();
+  if (s) {
+    rows = rows.filter(r => [r.name, r.phone, r.brand, r.product, r.model, r.terms, r.message]
+      .some(v => (v||'').toString().toLowerCase().includes(s)));
+  }
+
+  // createdAt desc 정렬
+  rows.sort((a,b)=> {
+    const da = toDate(a.createdAt) || new Date(0);
+    const db = toDate(b.createdAt) || new Date(0);
+    return db - da;
   });
 
   // CSV 내보내기
