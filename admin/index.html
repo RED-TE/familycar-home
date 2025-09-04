@@ -322,7 +322,13 @@ function phoneMask(s){
         const d = doc.data() || {};
         return {
           id: doc.id,
-          createdAt: d.createdAt || d._createdAt || d.ts || null,
+          createdAt: (() => {
+            if (d.createdAt) return d.createdAt;
+            if (d._createdAt) return d._createdAt;
+            if (d.ts) return d.ts;
+            // fallback: make a Date from doc.createTime to keep relative order
+            try { return { seconds: Math.floor(new Date(doc.createTime.toDate ? doc.createTime.toDate() : new Date(doc.createTime)).getTime()/1000) }; } catch (e) { return null; }
+          })(),
           name: d.name || "",
           phone: d.phone || "",
           brand: d.brand || d.carBrand || "",
@@ -350,7 +356,13 @@ function phoneMask(s){
             const d = doc.data() || {};
             return {
               id: doc.id,
-              createdAt: d.createdAt || d._createdAt || d.ts || null,
+              createdAt: (() => {
+                if (d.createdAt) return d.createdAt;
+                if (d._createdAt) return d._createdAt;
+                if (d.ts) return d.ts;
+                // fallback: make a Date from doc.createTime to keep relative order
+                try { return { seconds: Math.floor(new Date(doc.createTime.toDate ? doc.createTime.toDate() : new Date(doc.createTime)).getTime()/1000) }; } catch (e) { return null; }
+              })(),
               name: d.name || "",
               phone: d.phone || "",
               brand: d.brand || d.carBrand || "",
