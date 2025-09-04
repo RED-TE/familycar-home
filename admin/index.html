@@ -167,17 +167,17 @@ textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
-import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+import { getFirestore, collection, doc, getDoc, getDocs, updateDoc, query, orderBy, limit, onSnapshot } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
 
 // ===== Firebase 설정 =====
 const firebaseConfig = {
-  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-  authDomain: "familycar-home.firebaseapp.com",
-  projectId: "familycar-home",
-  storageBucket: "familycar-home.firebasestorage.app",
-  messagingSenderId: "69504878653",
-  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-  measurementId: "G-YXV83SLSD0"
+  apiKey: "AIzaSyBp5RDs87mLocfgPZ-oI_GfQ-Lr8SM4xK0",
+  authDomain: "familyauto-71c11.firebaseapp.com",
+  projectId: "familyauto-71c11",
+  storageBucket: "familyauto-71c11.firebasestorage.app",
+  messagingSenderId: "251564150896",
+  appId: "1:251564150896:web:9bc80da30329ee9cf0e4b5",
+  measurementId: "G-PVBC1NH5TG"
 };
 
 initializeApp(firebaseConfig);
@@ -200,6 +200,7 @@ const tbody = document.querySelector('#tbl tbody');
 
 let ALL = []; // 메모리에 적재해서 필터/검색/페이지네이션
 let page = 1;
+let unsubscribe = null;
 
 // ===== 로그인 & 권한 =====
 
@@ -254,17 +255,36 @@ document.getElementById('next').onclick = () => {
 qEl.oninput = debounce(() => { page=1; render(); }, 300);
 statusEl.onchange = () => { page=1; render(); };
 pageSizeEl.onchange = () => { page=1; render(); };
-dateRangeEl.onchange = () => { page=1; refreshAndLoad(); };
+dateRangeEl.onchange = () => { page=1; render(); };
 
 async function refreshAndLoad(){
-  loadingEl.style.display = 'block';
-  ALL = await fetchInquiries();
-  page = 1;
-  render();
-  loadingEl.style.display = 'none';
+  // 실시간 구독 시작
+  startRealtime();
 }
 
-// Firestore에서 최근 문의 로딩 (최대 1000건)
+function startRealtime(){
+  loadingEl.style.display = 'block';
+  // 기존 구독 해제
+  if (typeof unsubscribe === 'function') { unsubscribe(); unsubscribe = null; }
+
+  const qRef = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
+  unsubscribe = onSnapshot(qRef, (snap) => {
+    const raw = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+
+    // 날짜 필터는 렌더 단계에서 처리하므로 원본을 저장
+    ALL = raw;
+
+    page = 1;
+    render();
+    loadingEl.style.display = 'none';
+  }, (err) => {
+    console.error('[admin] onSnapshot error:', err);
+    loadingEl.style.display = 'none';
+    alert('실시간 구독 오류: ' + (err.message || err));
+  });
+}
+
+// (미사용) onSnapshot 실시간 모드로 대체됨
 async function fetchInquiries(){
   const baseQ = query(collection(db, 'inquiries'), orderBy('createdAt','desc'), limit(1000));
   const snap = await getDocs(baseQ);
@@ -288,6 +308,21 @@ async function fetchInquiries(){
 function render(){
   const ps = Number(pageSizeEl.value);
   let rows = [...ALL];
+
+  // 날짜 필터 (클라이언트 측)
+  const now = new Date();
+  let startDate;
+  if (dateRangeEl.value === 'today') {
+    startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  } else if (dateRangeEl.value === '7d') {
+    startDate = new Date(now.getTime() - 7*24*60*60*1000);
+  }
+  if (startDate) {
+    rows = rows.filter(r => {
+      const t = toDate(r.createdAt);
+      return t ? (t >= startDate) : true;
+    });
+  }
 
   // 상태 필터 (툴바 선택값과 동일한 경우만 필터)
   if (statusEl.value !== 'all') rows = rows.filter(r => r.status === statusEl.value);
