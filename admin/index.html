@@ -36,6 +36,22 @@
   .ok{background:var(--brand)}
   .warn{background:var(--warn)}
   .danger{background:var(--danger)}
+  /* Status styles (요청 색상 매핑) */
+  .st-assigned{background:#ef4444;color:#fff;border-color:transparent}   /* 담당자 배정 = 빨간색 */
+  .st-unassigned{background:#ffffff;color:var(--ink);border:1px solid var(--line)} /* 미배정 = 흰색 */
+  .st-rejected{background:#9ca3af;color:#fff;border-color:transparent}    /* 부결 = 회색 */
+
+  /* Row backgrounds by status (entire row) */
+  tbody tr.row-assigned td{background:#fee2e2 !important;} /* 연분홍 - 담당자 배정 */
+  tbody tr.row-unassigned td{background:#ffffff !important;} /* 흰색 - 미배정 */
+  tbody tr.row-rejected td{background:#e5e7eb !important;}  /* 연회색 - 부결 */
+
+  /* Hover states for better feedback */
+  tbody tr.row-assigned:hover td{background:#fecaca !important;}
+  tbody tr.row-unassigned:hover td{background:#f9fafb !important;}
+  tbody tr.row-rejected:hover td{background:#d1d5db !important;}
+  textarea.memo{width:100%;min-height:48px;resize:vertical}
+  .cell-actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
   .footer{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
   .pager{display:flex;gap:6px}
   .pager button[disabled]{opacity:.4;cursor:not-allowed}
@@ -112,7 +128,8 @@
             <th style="min-width:120px">조건</th>
             <th>요청사항</th>
             <th style="min-width:110px">채널</th>
-            <th style="min-width:90px">상태</th>
+            <th style="min-width:200px">메모</th>
+            <th style="min-width:180px">상태</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -252,9 +269,11 @@ function phoneMask(s){
     const filtered = clientFilter(rows);
     $count.textContent = `${filtered.length}건 (표시 기준)`;
     tbody.innerHTML = filtered.map(r => {
-      const statusBadge = `<span class="badge"><span class="status-dot ${r.status==="done"?"ok":r.status==="hold"?"warn":"danger"}"></span>${r.status||"new"}</span>`;
+      const st = (r.status || "미배정");
+      const stBadgeClass = st==="담당자 배정" ? "st-assigned" : st==="부결" ? "st-rejected" : "st-unassigned";
+      const rowClass = st==="담당자 배정" ? "row-assigned" : st==="부결" ? "row-rejected" : "row-unassigned";
       return `
-        <tr>
+        <tr class="${rowClass}" data-id="${r.id}">
           <td class="mono">${fmt(r.createdAt)}</td>
           <td>${r.name||""}</td>
           <td class="mono">${phoneMask(r.phone||"")}</td>
@@ -264,7 +283,23 @@ function phoneMask(s){
           <td>${r.terms||""}</td>
           <td>${(r.message||"").replace(/\n/g,"<br>")}</td>
           <td>${r.channel||""}</td>
-          <td>${statusBadge}</td>
+          <td>
+            <div class="cell-actions">
+              <textarea class="memo" data-id="${r.id}" placeholder="메모 작성...">${(r.memo||"")}</textarea>
+              <button class="btn-ghost save-memo" data-id="${r.id}">저장</button>
+            </div>
+          </td>
+          <td>
+            <div class="cell-actions">
+              <span class="badge ${stBadgeClass}" data-id="${r.id}" aria-label="현재 상태">${st}</span>
+              <select class="status" data-id="${r.id}">
+                <option value="미배정" ${st==="미배정"?"selected":""}>미배정</option>
+                <option value="담당자 배정" ${st==="담당자 배정"?"selected":""}>담당자 배정</option>
+                <option value="부결" ${st==="부결"?"selected":""}>부결</option>
+              </select>
+              <button class="btn-ghost apply-status" data-id="${r.id}">변경</button>
+            </div>
+          </td>
         </tr>
       `;
     }).join("");
@@ -296,7 +331,8 @@ function phoneMask(s){
           terms: d.terms || "",
           message: d.message || "",
           channel: d.channel || d.source || "",
-          status: d.status || "new"
+          status: d.status || "new",
+          memo: d.memo || ""
         };
       });
 
@@ -323,7 +359,8 @@ function phoneMask(s){
               terms: d.terms || "",
               message: d.message || "",
               channel: d.channel || d.source || "",
-              status: d.status || "new"
+              status: d.status || "new",
+              memo: d.memo || ""
             };
           });
           render(currentRows);
@@ -373,6 +410,55 @@ document.getElementById("exportCsv").addEventListener("click", ()=>{
   a.href = url; a.download = `inquiries_${Date.now()}.csv`;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
+});
+
+// 행 내부(메모 저장 / 상태 변경) 위임 처리
+tbody.addEventListener("click", async (e)=>{
+  const t = e.target;
+  // 메모 저장
+  if (t.classList.contains("save-memo")) {
+    const id = t.getAttribute("data-id");
+    const row = t.closest("tr");
+    const memoEl = row.querySelector(`textarea.memo[data-id="${id}"]`);
+    const memoVal = (memoEl?.value || "").trim();
+    try{
+      await updateDoc(doc(db, "inquiries", id), { memo: memoVal });
+      // 로컬 데이터도 갱신
+      const item = currentRows.find(x=>x.id===id);
+      if (item) item.memo = memoVal;
+      render(currentRows);
+      alert("메모 저장 완료");
+    }catch(err){
+      console.error(err);
+      alert("메모 저장 실패: " + (err?.message||err));
+    }
+  }
+  // 상태 변경 적용
+  if (t.classList.contains("apply-status")) {
+    const id = t.getAttribute("data-id");
+    const row = t.closest("tr");
+    const sel = row.querySelector(`select.status[data-id="${id}"]`);
+    const val = sel?.value || "미배정";
+    try{
+      await updateDoc(doc(db, "inquiries", id), { status: val });
+      const item = currentRows.find(x=>x.id===id);
+      if (item) item.status = val;
+      render(currentRows);
+    }catch(err){
+      console.error(err);
+      alert("상태 변경 실패: " + (err?.message||err));
+    }
+  }
+});
+tbody.addEventListener("keydown", (e)=>{
+  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+    const ta = e.target.closest("textarea.memo");
+    if (ta) {
+      const id = ta.getAttribute("data-id");
+      const btn = ta.closest("tr").querySelector(`button.save-memo[data-id="${id}"]`);
+      btn?.click();
+    }
+  }
 });
 
 // 초기 로드는 onAuthStateChanged에서 로그인 후 수행
