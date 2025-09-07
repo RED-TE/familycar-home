@@ -102,7 +102,7 @@
           const dotsWrap = document.getElementById('promo-dots');
           if(!slider || !slides.length) return;
 
-          let idx = 0; let timer = null; const INTERVAL = 8000;
+          let idx = 0; let timer = null; const INTERVAL = 4000;
 
           function buildDots(){
             if(!dotsWrap) return;
@@ -174,8 +174,9 @@
             <div>
               <label class="text-xs text-neutral-500">구분</label>
               <select name="channel" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2">
-                <option>장기렌트</option>
-                <option>리스</option>
+                <option>개인</option>
+                <option>개인사업자</option>
+                <option>법인</option>
               </select>
             </div>
             <div>
@@ -227,10 +228,6 @@
               </select>
             </div>
             <div class="sm:col-span-2">
-              <label class="text-xs text-neutral-500">차종(모델)</label>
-              <input name="model" placeholder="예: 쏘렌토 하이브리드, 520i 등" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2 outline-none focus:ring-2 focus:ring-emerald-400"/>
-            </div>
-            <div class="sm:col-span-2">
               <label class="text-xs text-neutral-500">요청사항 (선택)</label>
               <textarea name="message" placeholder="원하는 등급/옵션, 초기비용(선수/보증금) 등" class="mt-1 w-full rounded-xl border border-neutral-200 px-3 py-2 min-h-[84px] resize-y outline-none focus:ring-2 focus:ring-emerald-400"></textarea>
             </div>
@@ -279,7 +276,7 @@
             <div class="category-rotator w-full h-full grid">
               <img src="images/cars/myb.png" alt="마이바흐 S580" class="w-full h-full object-contain p-2 hidden" />
               <img src="images/cars/5series.png" alt="BMW 5시리즈" class="w-full h-full object-contain p-2 hidden" />
-              <img src="images/cars/bmw_3_series.png" alt="BMW 3시리즈" class="w-full h-full object-contain p-2 hidden" />
+              <img src="images/cars/BMW_3_Series.png" alt="BMW 3시리즈" class="w-full h-full object-contain p-2 hidden" />
             </div>
           </div>
           <div class="mt-3">
@@ -366,7 +363,7 @@
       <div id="pricingGrid" class="mt-6 grid md:grid-cols-3 gap-6">
         <!-- 국산 인기차종 (렌트) from familyauto.co.kr -->
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/sorento.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 쏘렌토</p>
             <p class="text-sm text-neutral-500">가솔린 터보 1.6 하이브리드 2WD 프레스티지 (5인승)</p>
@@ -376,7 +373,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/santafe.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">현대 싼타페</p>
             <p class="text-sm text-neutral-500">가솔린 터보 1.6 하이브리드 2WD 익스클루시브 (5인승)</p>
@@ -386,7 +383,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/carnival.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 카니발</p>
             <p class="text-sm text-neutral-500">가솔린 2.5 터보 7인승 시그니처 (A/T)</p>
@@ -396,7 +393,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/gv80.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">제네시스 GV80</p>
             <p class="text-sm text-neutral-500">가솔린 2.5T 2WD (A/T)</p>
@@ -406,7 +403,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/grandeur.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">현대 그랜저</p>
             <p class="text-sm text-neutral-500">2.5 가솔린 프리미엄 (A/T)</p>
@@ -416,7 +413,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/avante.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">현대 아반떼</p>
             <p class="text-sm text-neutral-500">1.6 가솔린 스마트 (A/T)</p>
@@ -426,7 +423,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/g80.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">제네시스 G80</p>
             <p class="text-sm text-neutral-500">가솔린 터보 2.5 2WD (A/T)</p>
@@ -436,7 +433,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/k8.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 K8</p>
             <p class="text-sm text-neutral-500">가솔린 2.5 2WD 노블레스 라이트 (A/T)</p>
@@ -446,7 +443,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/palisade.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">현대 팰리세이드</p>
             <p class="text-sm text-neutral-500">가솔린 2.5 터보 2WD 9인승 익스클루시브 (A/T)</p>
@@ -456,7 +453,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/k5.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 K5</p>
             <p class="text-sm text-neutral-500">가솔린 2.0 2WD 스마트 셀렉션 (A/T)</p>
@@ -466,7 +463,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/sportage.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 스포티지</p>
             <p class="text-sm text-neutral-500">가솔린 1.6 터보 2WD 프레스티지 (A/T)</p>
@@ -476,7 +473,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/seltos.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">기아 셀토스</p>
             <p class="text-sm text-neutral-500">가솔린 1.6 터보 2WD 트렌디 (A/T)</p>
@@ -498,7 +495,7 @@
       </div>
       <div id="importGrid" class="mt-6 grid md:grid-cols-3 gap-6">
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/glc.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">벤츠 GLC 300 Avantgarde 4Matic</p>
             <p class="text-sm text-neutral-500">가솔린 2.0 4WD (A/T)</p>
@@ -508,7 +505,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/q6_performance.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/Q6_Performance.png"></div>
           <div class="mt-4">
             <p class="font-bold">아우디 Q6 e-tron Performance</p>
             <p class="text-sm text-neutral-500">전기 (A/T)</p>
@@ -518,7 +515,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/q4_45.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/Q4_45.png"></div>
           <div class="mt-4">
             <p class="font-bold">아우디 Q4 e-tron 45</p>
             <p class="text-sm text-neutral-500">전기 2WD (A/T)</p>
@@ -538,7 +535,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/bmw_3_series.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/BMW_3_Series.png"></div>
           <div class="mt-4">
             <p class="font-bold">BMW 320i M Sport</p>
             <p class="text-sm text-neutral-500">가솔린 2.0 2WD (A/T)</p>
@@ -548,7 +545,7 @@
           <button class="mt-4 w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2.5" onclick="scrollToQuote()">이 조건으로 견적</button>
         </div>
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/xc60.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">볼보 XC60 B5 Ultra</p>
             <p class="text-sm text-neutral-500">가솔린 2.0 터보 AWD (A/T)</p>
@@ -571,7 +568,7 @@
         
         <!-- 추가: 벤츠 S450 4Matic L (수입 리스) -->
         <div class="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot" data-src="images/cars/sclass.png"></div>
+          <div class="aspect-[16/9] w-full rounded-xl bg-neutral-100 overflow-hidden img-slot"></div>
           <div class="mt-4">
             <p class="font-bold">벤츠 S450 4Matic L</p>
             <p class="text-sm text-neutral-500">가솔린 3.0 4WD (A/T)</p>
@@ -828,9 +825,9 @@
       });
     }
 
-    // ✅ 두 섹션에 각각 적용 (6개씩, 10초마다 자동 전환)
-    makePager('pricingGrid', 'pricingPager', 6, 10000);
-    makePager('importGrid',  'importPager',  6, 10000);
+    // ✅ 두 섹션에 각각 적용 (6개씩, 5초마다 자동 전환)
+    makePager('pricingGrid', 'pricingPager', 6, 5000);
+    makePager('importGrid',  'importPager',  6, 5000);
 
     // ===== Smooth scroll to quote =====
     function scrollToQuote(){ document.querySelector('#fast-quote').scrollIntoView({behavior:'smooth', block:'start'}); }
@@ -878,13 +875,12 @@
       const period  = (form.get('period')||'').toString();
       const mileage = (form.get('mileage')||'').toString();
       const message = (form.get('message')||'').toString();
-      const model   = (form.get('model')||'').toString();
 
       if(!name){ alert('성함을 입력해 주세요.'); return; }
       if(!/^[0-9\-]{9,}$/.test(phone)){ alert('연락처를 정확히 입력해 주세요.'); return; }
       if(!(form.get('brand')||'').toString()){ alert('브랜드를 선택해 주세요.'); return; }
 
-      const payload = { name, phone, channel, brand, model, period, mileage, message };
+      const payload = { name, phone, channel, brand, period, mileage, message };
       window.__submitInquiry?.(payload).then((res)=>{ if(res && res.ok){ console.log('Firebase 저장 완료'); } }).catch(console.error);
 
       // Show modal
@@ -914,16 +910,16 @@
   import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
   // ✅ index.html과 동일한 설정 사용
-const firebaseConfig = {
-  apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
-  authDomain: "familycar-home.firebaseapp.com",
-  projectId: "familycar-home",
-  storageBucket: "familycar-home.appspot.com",
-  messagingSenderId: "69504878653",
-  appId: "1:69504878653:web:fca733d65e5fc7c126c254",
-  measurementId: "G-YXV83SLSD0"
-};
-  
+  const firebaseConfig = {
+    apiKey: "AIzaSyDb-hOB-YOvtGvMZLyUXLz4nmwGaSOMrco",
+    authDomain: "familycar-home.firebaseapp.com",
+    projectId: "familycar-home",
+    storageBucket: "familycar-home.firebasestorage.app",
+    messagingSenderId: "69504878653",
+    appId: "1:69504878653:web:fca733d65e5fc7c126c254",
+    measurementId: "G-YXV83SLSD0"
+  };
+
   const app = initializeApp(firebaseConfig);
   const db  = getFirestore(app);
   const analytics = getAnalytics(app);
@@ -963,77 +959,165 @@ const firebaseConfig = {
 </script>
 <script>
 (function(){
-  // ---------- 이미지 로더 (단순/즉시 로딩, 소문자 파일명 가정) ----------
-  function filenameToLower(p){
-    if(!p) return p;
-    // 경로 전체를 소문자로 변환 (디렉터리/파일 모두 소문자로 통일된 구조 기준)
-    return p.toLowerCase();
+  // ---------- 이미지 매칭 로더 (이름 바뀌어도 안전하게) ----------
+  // 우선순위: 1) .img-slot[data-src]  2) 카드[data-img]  3) 카드[data-model]
+  //          4) 한글/영문 키워드 매핑(ALIAS_MAP)  5) 타이틀 기반 자동 슬러그
+
+  // 확장자 후보
+  const EXTS = ['.png','.jpg','.jpeg','.webp','.avif'];
+
+  // ✅ 한글/영문 키워드 → 실제 파일명 매핑 (운영자가 파일만 업로드해도 매칭)
+  // 왼쪽 키워드가 타이틀에 포함되면 오른쪽 파일을 사용합니다.
+  const ALIAS_MAP = [
+    // 국산
+    { kw: ['쏘렌토','sorento'],   file: 'sorento.png' },
+    { kw: ['싼타페','santafe'],   file: 'santafe.png' },
+    { kw: ['카니발','carnival'],  file: 'carnival.png' },
+    { kw: ['그랜저','grandeur'],  file: 'grandeur.png' },
+    { kw: ['아반떼','avante','elantra'], file: 'avante.png' },
+    { kw: ['스포티지','sportage'],file: 'sportage.png' },
+    { kw: ['셀토스','seltos'],    file: 'seltos.png' },
+    { kw: ['팰리세이드','palisade'], file: 'palisade.png' },
+    { kw: ['k5'],                 file: 'k5.png' },
+    { kw: ['k8'],                 file: 'k8.png' },
+    { kw: ['gv80'],               file: 'gv80.png' },
+    { kw: ['g80'],                file: 'g80.png' },
+
+    // 수입 (필요시 추가)
+    { kw: ['glc 300','glc300','glc'], file: 'glc.png' },
+    { kw: ['q6 e-tron','q6 e tron','q6'], file: 'q6_e-tron_performance.png' },
+    { kw: ['q4 e-tron 45','q4 45','q4'], file: 'q4_e-tron_45.png' },
+    { kw: ['520i','5 시리즈','5시리즈','5series'], file: '5series.png' },
+    { kw: ['320i','3 시리즈','3시리즈','3series'], file: '3_series.png' },
+    { kw: ['xc60'], file: 'xc60.png' },
+    { kw: ['마이바흐','maybach','s580'], file: 'myb.png' },
+    { kw: ['s450'], file: 'sclass.png' }
+  ];
+
+  // 안전한 슬러그 변환 (표시용 이름이 바뀌어도 동일 규칙으로 경로 생성)
+  function toSlug(s){
+    return (s||'')
+      .normalize('NFKD')               // 한글/유니코드 정규화
+      .replace(/[\u0300-\u036f]/g,'') // 결합 분음 제거
+      .replace(/\((?:.|\n)*?\)/g,'') // 괄호 내용 제거
+      .replace(/[^A-Za-z0-9가-힣]+/g,'-')
+      .replace(/^-+|-+$/g,'')
+      .toLowerCase();
   }
 
-  // 타이틀 → 고정 경로 매핑 (모두 소문자 파일명)
-  const TITLE_MAP = new Map([
-    ['기아 쏘렌토','images/cars/sorento.png'],
-    ['현대 싼타페','images/cars/santafe.png'],
-    ['기아 카니발','images/cars/carnival.png'],
-    ['제네시스 gv80','images/cars/gv80.png'],
-    ['현대 그랜저','images/cars/grandeur.png'],
-    ['현대 아반떼','images/cars/avante.png'],
-    ['제네시스 g80','images/cars/g80.png'],
-    ['기아 k8','images/cars/k8.png'],
-    ['현대 팰리세이드','images/cars/palisade.png'],
-    ['기아 k5','images/cars/k5.png'],
-    ['기아 스포티지','images/cars/sportage.png'],
-    ['기아 셀토스','images/cars/seltos.png'],
-    // 수입
-    ['벤츠 glc 300 avantgarde 4matic','images/cars/glc.png'],
-    ['아우디 q6 e-tron performance','images/cars/q6_performance.png'],
-    ['아우디 q4 e-tron 45','images/cars/q4_45.png'],
-    ['bmw 520i m sport','images/cars/5series.png'],
-    ['bmw 320i m sport','images/cars/bmw_3_series.png'],
-    ['볼보 xc60 b5 ultra','images/cars/xc60.png'],
-    ['메르세데스-마이바흐 s580','images/cars/myb.png'],
-    ['벤츠 s450 4matic l','images/cars/sclass.png'],
-  ]);
+  // 경로 조합: "images/cars/<slug>" 기본 + 몇 가지 변형을 시도
+  function basesFromSlug(slug){
+    const b = `images/cars/${slug}`;
+    const variants = new Set([b]);
+    variants.add(b.replace(/-/g,'_'));
+    variants.add(b.replace(/_/g,'-'));
+    variants.add(b.replace(/-/g,''));
+    return Array.from(variants);
+  }
 
-  function loadCardImage(card){
+  // 경로에 확장자 붙이기
+  function expandWithExt(paths){
+    const out = new Set();
+    paths.forEach(p=>{
+      if(/\.[A-Za-z0-9]+$/.test(p)){
+        const stem = p.replace(/\.[A-Za-z0-9]+$/, '');
+        EXTS.forEach(ext=> out.add(stem + ext));
+      }else{
+        EXTS.forEach(ext=> out.add(p + ext));
+      }
+    });
+    return Array.from(out);
+  }
+
+  // 명시 경로 정규화 (파일명만 소문자/언더스코어로 정리)
+  function normalizeExplicitPath(p){
+    try {
+      const parts = p.split('/');
+      if(parts.length === 0) return p;
+      const last = parts.pop();
+      const m = last.match(/^(.*?)(\.[A-Za-z0-9]+)?$/);
+      if(!m) return p;
+      const stem = (m[1]||'').replace(/\s+/g,'_').toLowerCase();
+      const ext  = m[2] || '';
+      parts.push(stem + ext);
+      return parts.join('/');
+    } catch(e){ return p; }
+  }
+
+  // 한글/영문 키워드 매칭 → 파일 경로 반환
+  function matchAlias(raw){
+    const t = (raw||'').toLowerCase();
+    for(const row of ALIAS_MAP){
+      for(const k of row.kw){
+        if(t.includes(k.toLowerCase())){
+          return `images/cars/${row.file}`;
+        }
+      }
+    }
+    return null;
+  }
+
+  // 실제 로딩 시도
+  function tryLoad(img, urlCandidates){
+    const urls = Array.from(new Set(urlCandidates)).map(u=>u.startsWith('images/')? u : `images/cars/${u}`);
+    let i = 0;
+    const next = () => {
+      if(i >= urls.length){
+        img.style.background = '#f8fafc';
+        img.style.border = '1px dashed #e5e7eb';
+        img.style.objectFit = 'contain';
+        img.alt = (img.alt || '차량 이미지') + ' (이미지 준비중)';
+        return;
+      }
+      img.src = encodeURI(urls[i++]);
+    };
+    img.addEventListener('error', next, { once:false });
+    next();
+  }
+
+  // 카드 단위 처리
+  document.querySelectorAll('#pricingGrid .rounded-2xl, #importGrid .rounded-2xl').forEach(card=>{
     const slot = card.querySelector('.img-slot');
     if(!slot) return;
 
-    // 1) data-src 우선
-    let src = slot.getAttribute('data-src');
-    if(src){ src = filenameToLower(src); }
+    // 1) .img-slot[data-src]
+    let explicit = slot.getAttribute('data-src');
+    if(explicit){ explicit = normalizeExplicitPath(explicit); }
 
-    // 2) 없으면 타이틀 매핑 사용
-    if(!src){
-      const title = (card.querySelector('.font-bold')?.textContent || '').trim().toLowerCase();
-      src = TITLE_MAP.get(title) || '';
+    // 2) 카드[data-img]
+    if(!explicit){
+      const di = card.getAttribute('data-img');
+      if(di) explicit = normalizeExplicitPath(di);
     }
 
-    // DOM 구성
+    // 3) 카드[data-model]
+    let modelKey = card.getAttribute('data-model');
+
+    // 4) ALIAS_MAP: 타이틀 키워드 매칭
+    const titleText = (card.querySelector('.font-bold')?.textContent || '').trim();
+    const aliasPath = matchAlias(titleText);
+
+    // 5) 타이틀 슬러그 자동 매칭 (마지막 수단)
+    const autoSlug = toSlug(titleText);
+
+    // 최종 후보 경로 생성
+    let baseCandidates = [];
+    if(explicit){ baseCandidates.push(explicit); }
+    if(modelKey){ baseCandidates = baseCandidates.concat(basesFromSlug(modelKey)); }
+    if(aliasPath){ baseCandidates.push(aliasPath); }
+    if(autoSlug){ baseCandidates = baseCandidates.concat(basesFromSlug(autoSlug)); }
+
+    // 중복 제거 + 확장자 조합
+    const urlCandidates = expandWithExt(baseCandidates);
+
+    const alt = slot.getAttribute('data-alt') || titleText || '차량 이미지';
     const img = document.createElement('img');
-    img.alt = (card.querySelector('.font-bold')?.textContent || '차량 이미지');
-    img.loading = 'lazy';
-    img.decoding = 'async';
+    img.alt = alt; img.loading = 'lazy'; img.decoding = 'async';
     img.className = 'w-full h-full object-contain rounded-xl p-1 md:p-2';
-    slot.innerHTML = '';
-    slot.appendChild(img);
+    slot.innerHTML = ''; slot.appendChild(img);
 
-    function setFallback(){
-      slot.style.background = '#f8fafc';
-      slot.style.border = '1px dashed #e5e7eb';
-      img.alt += ' (이미지 준비중)';
-    }
-
-    if(src){
-      img.src = src;
-      img.addEventListener('error', setFallback, { once: true });
-    } else {
-      setFallback();
-    }
-  }
-
-  document.querySelectorAll('#pricingGrid .rounded-2xl, #importGrid .rounded-2xl')
-    .forEach(loadCardImage);
+    tryLoad(img, urlCandidates);
+  });
 })();
 </script>
 </body>
